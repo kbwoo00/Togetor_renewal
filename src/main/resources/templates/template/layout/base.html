@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link th:href="@{css/bootstrap.min.css}" href="../../css/bootstrap.min.css" rel="stylesheet">
+    <link th:href="@{/css/bootstrap.min.css}" href="/templates/css/bootstrap.min.css" rel="stylesheet"/>
     <title th:replace="${title}">Hello, world!</title>
 </head>
 <body>
@@ -17,7 +17,7 @@
     <footer th:replace="~{template/fragments/footer :: footer}"></footer>
 </div>
 
-<script th:src="@{js/bootstrap.bundle.min.js}" src="../../js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/bootstrap.bundle.min.js}" src="/templates/js/bootstrap.bundle.min.js"/>
 </body>
 </html>
 
