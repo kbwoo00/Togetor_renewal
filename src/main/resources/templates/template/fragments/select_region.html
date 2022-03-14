@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:fragment="select" class="container">
+    <div class="row justify-content-evenly">
+        <div class="col"></div>
+        <div class="col-md-auto align-content-end">
+            <div class="row">
+                <div class="col-md-auto">
+                    <select class="form-select select-region" required>
+                        <option value="">지역을 선택하세요</option>
+                        <option>United States</option>
+                    </select>
+                </div>
+                <div class="col-md-auto">
+                    <select class="form-select select-region" required>
+                        <option value="">동네를 선택하세요</option>
+                        <option>United States</option>
+                    </select>
+                </div>
+                <div class="col-md-auto">
+                    <select class="form-select select-region" required>
+                        <option value="">동을 선택하세요</option>
+                        <option>United States</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

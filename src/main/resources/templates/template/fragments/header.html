@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<header th:fragment="header" class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+    <a th:href="@{http://localhost:8088}" href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
+        <span class="fs-4">Togetor</span>
+    </a>
+    <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-evenly mb-md-0">
+        <li><a href="#" class="nav-link px-2 link-dark">공동구매</a></li>
+        <li><a href="#" class="nav-link px-2 link-dark">카테고리별 보기</a></li>
+    </ul>
+
+    <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
+        <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
+    </form>
+
+    <div class="col-md-auto text-end">
+        <a th:href="@{http://localhost:8088/user/login}"><button type="button" class="btn btn btn-outline-dark me-2">로그인</button></a>
+        <a th:href="@{http://localhost:8088/user/join}"><button type="button" class="btn btn-outline-secondary me-2">마이페이지</button></a>
+        <button type="button" class="btn btn-outline-secondary me-2">글쓰기</button>
+    </div>
+</header>
+</body>
+</html>

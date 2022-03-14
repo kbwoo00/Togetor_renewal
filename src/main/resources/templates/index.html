@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{template/layout/base :: layout(~{::title}, ~{::main})}">
+<head>
+    <title>Togetor</title>
+</head>
+<body>
+<main>
+    <div class="container">
+        <div th:replace="~{template/fragments/select_region :: select}"></div>
+        <div class="row g-5 mt-2">
+            <div class="col-md-6 ">
+                <div class="row border-bottom justify-content-between">
+                    <div class="col-md-auto">
+                        <h3><a class="text-decoration-none text-dark" href="/">운동</a></h3>
+                    </div>
+                    <div class="col-md-auto p-2">
+                        <span><a href="/" class="text-decoration-none text-secondary">더보기</a></span>
+                    </div>
+                </div>
+                <ul class="list-unstyled mt-3">
+                    <li class="mb-2"><a href="/" class="text-decoration-none text-dark ">내용1</a></li>
+                    <li class="mb-2"><a href="/" class="text-decoration-none text-dark ">내용2</a></li>
+                </ul>
+            </div>
+            <div class="col-md-6 ">
+                <div class="row border-bottom justify-content-between">
+                    <div class="col-md-auto">
+                        <h3><a class="text-decoration-none text-dark" href="/">운동</a></h3>
+                    </div>
+                    <div class="col-md-auto p-2">
+                        <span><a href="/" class="text-decoration-none text-secondary">더보기</a></span>
+                    </div>
+                </div>
+                <ul class="list-unstyled mt-3">
+                    <li class="mb-2"><a href="/" class="text-decoration-none text-dark ">내용1</a></li>
+                    <li class="mb-2"><a href="/" class="text-decoration-none text-dark ">내용2</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>
+
