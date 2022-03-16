@@ -2,9 +2,7 @@ package com.togetor_renewal.togetor.validation.user;
 
 import lombok.Data;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.*;
 
 @Data
 public class UserJoinForm {
@@ -12,17 +10,25 @@ public class UserJoinForm {
     @Email
     private String email;
     @NotBlank
-    @Pattern(regexp = "(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,20}"
-            , message = "패스워드는 대문자, 소문자, 특수문자가 적어도 하나씩은 있어야 하며 최소 8자리여야 하며 최대 20자리까지 가능합니다.")
-    private String pass1;
+    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[$@$!%*#?&])[A-Za-z[0-9]$@$!%*#?&]{8,20}$")
+    private String pass;
     @NotBlank
-    private String pass2;
+    private String passConfirm;
     @NotBlank
     private String name;
     @NotBlank
+    @Size(min = 5, max = 20, message = "별명은 5 ~ 20자까지 가능합니다.")
+    private String nickname;
+    @NotBlank
+    @Pattern(regexp = "^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$",
+    message = "올바른 형식이 아닙니다.")
     private String phone;
 
-    private String zipcode;
+    @NotBlank
+    private String postcode;
+    @NotBlank
     private String address;
+    @NotBlank
     private String detailAddress;
+    private String extraAddress;
 }
