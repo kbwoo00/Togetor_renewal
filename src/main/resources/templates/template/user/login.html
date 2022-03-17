@@ -10,22 +10,32 @@
             margin-top: 30vh;
             min-width: 50vw;
         }
+        .field-error {
+            border-color: red;
+            color: red;
+        }
 
     </style>
 </head>
 <body class="text-center">
     <div class="container w-50">
         <main class="form-signin">
-            <form class="form-box w-auto">
-                <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+            <form th:action action="/" method="post" class="form-box w-auto">
+                <h1 class="h2 mb-5 fw-bold" th:text="'Togetor 로그인'">로그인</h1>
 
                 <div class="form-floating">
-                    <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                    <label for="floatingInput">이메일 주소</label>
+                    <input type="email" th:field="${user.email}" class="form-control" id="email" placeholder="name@example.com">
+                    <label>이메일 주소</label>
                 </div>
                 <div class="form-floating">
-                    <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
-                    <label for="floatingPassword">비밀번호 입력</label>
+                    <input type="password" th:field="${user.pass}" class="form-control" id="pass" placeholder="Password">
+                    <label>비밀번호 입력</label>
+                    <div class="field-error" th:errors="${user.email}">
+                        이메일을 입력해주세요
+                    </div>
+                    <div class="field-error" th:errors="${user.pass}">
+                        비밀번호를 입력해주세요
+                    </div>
                 </div>
 
                 <div class="checkbox mb-3">
