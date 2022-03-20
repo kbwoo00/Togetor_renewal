@@ -1,4 +1,4 @@
-package com.togetor_renewal.togetor.web.validation.user;
+package com.togetor_renewal.togetor.domain.validation.user;
 
 
 import lombok.Getter;
@@ -14,5 +14,4 @@ public class UserLoginForm {
     private String email;
     @NotBlank
     private String pass;
-
 }

@@ -15,57 +15,59 @@
 <body>
 <main>
     <h3 class="text-muted text-center mb-3">글쓰기</h3>
-    <div class="container border rounded write-form">
-        <div class="mb-3 mt-3">
-            <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="제목을 입력해주세요">
-        </div>
-        <select class="form-select mb-3">
-            <option class="text-muted" selected>카테고리를 선택해주세요</option>
-            <option value="1">One</option>
-            <option value="2">Two</option>
-            <option value="3">Three</option>
-        </select>
+    <form th:action action="/" th:object="${post}" method="post">
+        <div class="container border rounded write-form">
+            <div class="mb-3 mt-3">
+                <input type="text" class="form-control" th:field="*{title}" id="title" placeholder="제목을 입력해주세요" required>
+            </div>
+            <select th:id="*{categoryName}" class="form-select mb-3" required>
+                <option class="text-muted" value="">카테고리를 선택해주세요</option>
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+            </select>
 
-        <div class="row mb-3">
-            <div class="col-md-auto">
-                <div class="row">
-                    <div class="col-md-auto">
-                        <select class="form-select select-region" required>
-                            <option class="text-muted" value="">지역을 선택하세요</option>
-                            <option>United States</option>
-                        </select>
-                    </div>
-                    <div class="col-md-auto">
-                        <select class="form-select select-region" required>
-                            <option class="text-muted" value="">동네를 선택하세요</option>
-                            <option>United States</option>
-                        </select>
-                    </div>
-                    <div class="col-md-auto">
-                        <select class="form-select select-region" required>
-                            <option class="text-muted" value="">동을 선택하세요</option>
-                            <option>United States</option>
-                        </select>
+            <div class="row mb-3">
+                <div class="col-md-auto">
+                    <div class="row">
+                        <div class="col-md-auto">
+                            <select th:id="*{siDo}" class="form-select select-region" required>
+                                <option class="text-muted" value="">지역을 선택하세요</option>
+                                <option value="sido">United States</option>
+                            </select>
+                        </div>
+                        <div class="col-md-auto">
+                            <select th:id="*{siGunGu}" class="form-select select-region" required>
+                                <option class="text-muted" value="">동네를 선택하세요</option>
+                                <option value="sigungu">United States</option>
+                            </select>
+                        </div>
+                        <div class="col-md-auto">
+                            <select th:id="*{eupMyeonDong}" class="form-select select-region" required>
+                                <option class="text-muted" value="">동을 선택하세요</option>
+                                <option value="eupmyeondong">United States</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="mb-3">
-            <label for="formFileSm" class="form-label fw-bold">관련 사진</label>
-            <input class="form-control form-control-sm" id="formFileSm" type="file">
-        </div>
+            <div class="mb-3">
+                <label for="formFileSm" class="form-label fw-bold">관련 사진</label>
+                <input th:field="*{image}" class="form-control form-control-sm" id="formFileSm" type="file">
+            </div>
 
-        <div class="mb-3">
-            <textarea class="form-control" id="exampleFormControlTextarea1" rows="15"></textarea>
-        </div>
+            <div class="mb-3">
+                <textarea required th:fields="*{content}" class="form-control" id="exampleFormControlTextarea1" rows="15"></textarea>
+            </div>
 
-        <div class="row justify-content-around mb-4">
-            <button type="button" class="btn btn-secondary col-md-1 fs-5">등록</button>
-            <button type="button" class="btn btn-outline-secondary col-md-1 fs-5">취소</button>
-        </div>
+            <div class="row justify-content-around mb-4">
+                <button type="submit" class="btn btn-secondary col-md-1 fs-5">등록</button>
+                <button th:onclick="|location.href='@{/}'|" type="button" class="btn btn-outline-secondary col-md-1 fs-5">취소</button>
+            </div>
 
-    </div>
+        </div>
+    </form>
 </main>
 
 </body>

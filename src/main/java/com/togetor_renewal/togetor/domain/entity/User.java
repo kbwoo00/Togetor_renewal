@@ -42,9 +42,4 @@ public class User {
         this.detailAddress = detailAddress;
         this.extraAddress = extraAddress;
     }
-
-    public User(String email, String pass){
-        this.email = email;
-        this.pass = pass;
-    }
 }

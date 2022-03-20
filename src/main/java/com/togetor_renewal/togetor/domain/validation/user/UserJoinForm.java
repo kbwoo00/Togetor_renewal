@@ -1,4 +1,4 @@
-package com.togetor_renewal.togetor.web.validation.user;
+package com.togetor_renewal.togetor.domain.validation.user;
 
 import lombok.Data;
 

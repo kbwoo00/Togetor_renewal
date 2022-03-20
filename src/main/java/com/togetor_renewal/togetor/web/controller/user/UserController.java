@@ -4,8 +4,8 @@ import com.togetor_renewal.togetor.domain.entity.User;
 import com.togetor_renewal.togetor.domain.repository.UserRepository;
 import com.togetor_renewal.togetor.web.Const;
 import com.togetor_renewal.togetor.web.service.user.LoginService;
-import com.togetor_renewal.togetor.web.validation.user.UserJoinForm;
-import com.togetor_renewal.togetor.web.validation.user.UserLoginForm;
+import com.togetor_renewal.togetor.domain.validation.user.UserJoinForm;
+import com.togetor_renewal.togetor.domain.validation.user.UserLoginForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -114,7 +114,4 @@ public class UserController {
 
         return "redirect:/";
     }
-
-
-
 }
