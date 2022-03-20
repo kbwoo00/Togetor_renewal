@@ -1,22 +1,21 @@
-package com.togetor_renewal.togetor.controller.user;
+package com.togetor_renewal.togetor.web.controller.user;
 
 import com.togetor_renewal.togetor.domain.entity.User;
 import com.togetor_renewal.togetor.domain.repository.UserRepository;
-import com.togetor_renewal.togetor.service.user.LoginService;
-import com.togetor_renewal.togetor.validation.user.UserJoinForm;
-import com.togetor_renewal.togetor.validation.user.UserLoginFrom;
+import com.togetor_renewal.togetor.web.Const;
+import com.togetor_renewal.togetor.web.service.user.LoginService;
+import com.togetor_renewal.togetor.web.validation.user.UserJoinForm;
+import com.togetor_renewal.togetor.web.validation.user.UserLoginForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -70,7 +69,7 @@ public class UserController {
         // 만든 User 객체를 Repository(DB)에 저장하자
         userRepository.save(user);
 
-        return "redirect:template/user/login";
+        return "redirect:/user/login";
     }
 
     @GetMapping("/login")
@@ -80,10 +79,13 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(@Validated @ModelAttribute("user") UserLoginFrom form, BindingResult bindingResult){
-
+    public String login(@Validated @ModelAttribute("user") UserLoginForm form,
+                        BindingResult bindingResult,
+                        @RequestParam(defaultValue = "/") String redirectURL,
+                        HttpServletRequest request)
+    {
         if (bindingResult.hasErrors()){
-            log.info("err={}", bindingResult);
+            log.info("err= {}", bindingResult);
             return "template/user/login";
         }
 
@@ -91,13 +93,28 @@ public class UserController {
 
         if (loginUser == null){
             bindingResult.reject("loginFail", "아이디 또는 비밀번호가 맞지 않습니다.");
+            log.info("err= {}", bindingResult);
             return "template/user/login";
         }
 
-        // 로그인 성공 처리 쿠키 및 세션 등
+        // 로그인 성공 처리 세션처리
+        HttpSession session = request.getSession(true); // true는 기존 세션이 있으면 세션을 반환, 없으면 신규 세션 생성
+        session.setAttribute(Const.LOGIN_SESSION, loginUser);
 
+        return "redirect:" + redirectURL;
+    }
+
+    @PostMapping("/logout")
+    public String logout(HttpServletRequest request){
+
+        //세션이 있으면 기존 세션 반환, 세션이 없으면 세션 생성하지 X
+        HttpSession session = request.getSession(false);
+
+        if (session != null) session.invalidate();
 
         return "redirect:/";
     }
+
+
 
 }

@@ -20,7 +20,7 @@
 <body class="text-center">
     <div class="container w-50">
         <main class="form-signin">
-            <form th:action action="/" method="post" class="form-box w-auto">
+            <form th:action action="/" th:object="${user}" method="post" class="form-box w-auto">
                 <h1 class="h2 mb-5 fw-bold" th:text="'Togetor 로그인'">로그인</h1>
 
                 <div class="form-floating">
@@ -36,6 +36,9 @@
                     <div class="field-error" th:errors="${user.pass}">
                         비밀번호를 입력해주세요
                     </div>
+                </div>
+                <div class="field-error" th:if="${#fields.hasGlobalErrors()}" th:each="err : ${#fields.globalErrors()}" th:text="${err}">
+                    에러
                 </div>
 
                 <div class="checkbox mb-3">

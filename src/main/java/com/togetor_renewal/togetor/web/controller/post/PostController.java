@@ -1,4 +1,4 @@
-package com.togetor_renewal.togetor.controller.post;
+package com.togetor_renewal.togetor.web.controller.post;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

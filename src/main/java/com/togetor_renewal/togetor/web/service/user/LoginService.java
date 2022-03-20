@@ -1,4 +1,4 @@
-package com.togetor_renewal.togetor.service.user;
+package com.togetor_renewal.togetor.web.service.user;
 
 import com.togetor_renewal.togetor.domain.entity.User;
 import com.togetor_renewal.togetor.domain.repository.UserRepository;
