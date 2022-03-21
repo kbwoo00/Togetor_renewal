@@ -5,23 +5,27 @@
     <title>Title</title>
 </head>
 <body>
-<header th:fragment="header" class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
-    <a th:href="@{http://localhost:8088}" href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
-        <span class="fs-4">Togetor</span>
+<header th:fragment="header" class="d-flex flex-wrap navbar justify-content-center py-3 mb-4 border-bottom">
+    <a th:href="@{/}" href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
+        <span class="fs-1 text-primary">Togetor</span>
     </a>
-    <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-evenly mb-md-0">
-        <li><a href="#" class="nav-link px-2 link-dark">공동구매</a></li>
-        <li><a href="#" class="nav-link px-2 link-dark">카테고리별 보기</a></li>
+    <ul class="nav col-12 col-lg-auto me-lg-auto justify-content-evenly mb-md-0">
+        <li><a href="#" class="nav-link px-2 link-dark fw-bold fs-5">공동구매</a></li>
+        <li><a th:href="@{/posts}" href="#" class="nav-link px-2 link-dark fw-bold fs-5">카테고리별 보기</a></li>
     </ul>
 
-    <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
-        <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
+    <form class="col-12 col-lg-auto mb-0 mb-lg-0 me-lg-3">
+        <input type="search" class="form-control" placeholder="Search...">
     </form>
 
-    <div class="col-md-auto text-end">
-        <a th:href="@{http://localhost:8088/user/login}"><button type="button" class="btn btn btn-outline-dark me-2">로그인</button></a>
-        <a th:href="@{http://localhost:8088/user/join}"><button type="button" class="btn btn-outline-secondary me-2">마이페이지</button></a>
-        <button type="button" class="btn btn-outline-secondary me-2">글쓰기</button>
+    <div class="col-md-auto text-end mb-0">
+        <form th:action="@{/user/logout}" th:method="post">
+            <a th:if="${session.loginSession != null}"><button type="submit" class="btn btn btn-outline-dark me-2 fw-bold">로그아웃</button></a>
+            <a th:href="@{/user/login}" th:if="${session.loginSession == null}"><button type="button" class="btn btn btn-outline-dark me-2 fw-bold">로그인</button></a>
+            <a th:href="@{/user/join}" th:if="${session.loginSession != null}"><button type="button" class="btn btn-outline-secondary me-2 fw-bold">마이페이지</button></a>
+            <a th:href="@{/post/write}" type="button" class="btn btn-outline-secondary me-2 fw-bold">글쓰기</a>
+        </form>
+
     </div>
 </header>
 </body>

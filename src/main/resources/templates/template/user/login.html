@@ -5,32 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link th:href="@{/css/bootstrap.min.css}" href="../../css/bootstrap.min.css" rel="stylesheet">
     <title>Title</title>
+    <style>
+        .form-box{
+            margin-top: 30vh;
+            min-width: 50vw;
+        }
+        .field-error {
+            border-color: red;
+            color: red;
+        }
+
+    </style>
 </head>
 <body class="text-center">
-<div class="container">
-    <main class="form-signin">
-        <form>
-            <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+    <div class="container w-50">
+        <main class="form-signin">
+            <form th:action action="/" th:object="${user}" method="post" class="form-box w-auto">
+                <h1 class="h2 mb-5 fw-bold" th:text="'Togetor 로그인'">로그인</h1>
 
-            <div class="form-floating">
-                <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                <label for="floatingInput">Email address</label>
-            </div>
-            <div class="form-floating">
-                <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
-                <label for="floatingPassword">Password</label>
-            </div>
+                <div class="form-floating">
+                    <input type="email" th:field="${user.email}" class="form-control" id="email" placeholder="name@example.com">
+                    <label>이메일 주소</label>
+                </div>
+                <div class="form-floating">
+                    <input type="password" th:field="${user.pass}" class="form-control" id="pass" placeholder="Password">
+                    <label>비밀번호 입력</label>
+                    <div class="field-error" th:errors="${user.email}">
+                        이메일을 입력해주세요
+                    </div>
+                    <div class="field-error" th:errors="${user.pass}">
+                        비밀번호를 입력해주세요
+                    </div>
+                </div>
+                <div class="field-error" th:if="${#fields.hasGlobalErrors()}" th:each="err : ${#fields.globalErrors()}" th:text="${err}">
+                    에러
+                </div>
 
-            <div class="checkbox mb-3">
-                <label>
-                    <input type="checkbox" value="remember-me"> Remember me
-                </label>
-            </div>
-            <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
-            <p class="mt-5 mb-3 text-muted">&copy; 2017–2022</p>
-        </form>
-    </main>
-</div>
+                <div class="checkbox mb-3">
+                    <label>
+                        <input type="checkbox" value="remember-me"> 로그인 유지
+                    </label>
+                </div>
+                <button class="w-100 btn btn-lg btn-primary" type="submit">로그인</button>
+                <button class="w-100 btn btn-lg btn-secondary" th:onclick="|location.href='/user/join'|" type="button">회원가입</button>
+                <p class="mt-5 mb-3 text-muted">&copy; 2017–2022</p>
+            </form>
+        </main>
+    </div>
+
 <script th:src="@{/js/bootstrap.bundle.min.js}" src="../../js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

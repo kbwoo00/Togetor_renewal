@@ -1,8 +1,9 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{template/layout/base :: layout(~{::title}, ~{::main})}">
+      th:replace="~{template/layout/base :: layout(~{::title}, ~{::main}, ~{::style})}">
 <head>
     <title>Togetor</title>
+    <style></style>
 </head>
 <body>
 <main>
@@ -12,7 +13,7 @@
             <div class="col-md-6 ">
                 <div class="row border-bottom justify-content-between">
                     <div class="col-md-auto">
-                        <h3><a class="text-decoration-none text-dark" href="/">운동</a></h3>
+                        <h3>운동</h3>
                     </div>
                     <div class="col-md-auto p-2">
                         <span><a href="/" class="text-decoration-none text-secondary">더보기</a></span>
@@ -26,7 +27,7 @@
             <div class="col-md-6 ">
                 <div class="row border-bottom justify-content-between">
                     <div class="col-md-auto">
-                        <h3><a class="text-decoration-none text-dark" href="/">운동</a></h3>
+                        <h3>보드게임</h3>
                     </div>
                     <div class="col-md-auto p-2">
                         <span><a href="/" class="text-decoration-none text-secondary">더보기</a></span>

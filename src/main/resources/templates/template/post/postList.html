@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{template/layout/base :: layout(~{::title}, ~{::main}, ~{::style})}">
+<head>
+    <title>Togetor 게시물들</title>
+    <style>
+        .post-info{
+            font-size: small;
+        }
+    </style>
+</head>
+<body>
+<main>
+    <div class="container">
+        <ul class="nav nav-tabs mb-3">
+            <li class="nav-item">
+                <a class="nav-link" href="#">운동</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="#">보드게임</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">노래방</a>
+            </li>
+        </ul>
+        <div th:replace="~{template/fragments/select_region :: select}"></div>
+        <h3 class="text-center">현재 선택된 지역은 XX입니다.</h3>
+
+        <div class="row mb-2 mt-4 me-0 p-0 g-0">
+            <div class="col-md-6">
+                <div class="row g-0 border rounded mb-4 shadow-sm h-md-250 post">
+                    <div class="col p-4 d-flex flex-column">
+                        <div class="row justify-content-between">
+                            <h3 class="mb-4 fs-3 fw-bold col-md">제목</h3>
+                            <div class="col-md-4 text-end">위치</div>
+                        </div>
+                        <p class="mb-4">내용 블라블라</p>
+                        <div class="row post-info">
+                            <div class="mb-1 col-md">작성자</div>
+                        </div>
+                        <div class="row post-info">
+                            <div class="mb-1 col-md-3 text-muted">댓글 수</div>
+                            <div class="mb-1 text-muted col-md-3 text-start">관심</div>
+                            <div class="mb-1 text-muted col-md-6 text-end">작성 시간</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row g-0 border rounded mb-4 shadow-sm h-md-250 post">
+                    <div class="col p-4 d-flex flex-column">
+                        <div class="row justify-content-between">
+                            <h3 class="mb-4 fs-3 fw-bold col-md">제목</h3>
+                            <div class="col-md-4 text-end">위치</div>
+                        </div>
+                        <p class="mb-4">내용 블라블라</p>
+                        <div class="row post-info">
+                            <div class="mb-1 col-md">작성자</div>
+                        </div>
+                        <div class="row post-info">
+                            <div class="mb-1 col-md-3 text-muted">댓글 수</div>
+                            <div class="mb-1 text-muted col-md-3 text-start">관심</div>
+                            <div class="mb-1 text-muted col-md-6 text-end">작성 시간</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <nav class="mt-5">
+        <ul class="pagination justify-content-center">
+            <li class="page-item disabled">
+                <a class="page-link">Previous</a>
+            </li>
+            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item">
+                <a class="page-link" href="#">Next</a>
+            </li>
+        </ul>
+    </nav>
+</main>
+
+</body>
+</html>
+

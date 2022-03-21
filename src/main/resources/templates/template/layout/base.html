@@ -1,10 +1,13 @@
 <!doctype html>
-<html lang="en" th:fragment="layout (title, content)" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" th:fragment="layout (title, content, style)" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link th:href="@{css/bootstrap.min.css}" href="../../css/bootstrap.min.css" rel="stylesheet">
+    <link th:href="@{/css/bootstrap.min.css}" href="/templates/css/bootstrap.min.css" rel="stylesheet"/>
     <title th:replace="${title}">Hello, world!</title>
+    <style th:replace="${style}">
+
+    </style>
 </head>
 <body>
 <div class="container">
@@ -13,11 +16,11 @@
 
 <main th:replace="${content}"></main>
 
-<div class="container">
+<div class="container mt-5">
     <footer th:replace="~{template/fragments/footer :: footer}"></footer>
 </div>
 
-<script th:src="@{js/bootstrap.bundle.min.js}" src="../../js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/bootstrap.bundle.min.js}" src="/templates/js/bootstrap.bundle.min.js"/>
 </body>
 </html>
 
