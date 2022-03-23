@@ -18,21 +18,21 @@ public class Post {
     private String title;
     private String content;
     private LocalDateTime regdate;
-    private LocalDateTime updated_at;
+    private LocalDateTime chgdate;
     private Long userId;
     private String userNickname;
-    private String categoryName;
+    private String categoryTitle;
     private String image;
 
 
-    public Post(String title, String content, LocalDateTime regdate, LocalDateTime updated_at, Long userId, String userNickname, String categoryName, String image, String siDo, String siGunGu, String eupMyeonDong) {
+    public Post(String title, String content, LocalDateTime regdate, LocalDateTime chgdate, Long userId, String userNickname, String categoryName, String image, String siDo, String siGunGu, String eupMyeonDong) {
         this.title = title;
         this.content = content;
         this.regdate = regdate;
-        this.updated_at = updated_at;
+        this.chgdate = chgdate;
         this.userId = userId;
         this.userNickname = userNickname;
-        this.categoryName = categoryName;
+        this.categoryTitle = categoryName;
         this.image = image;
     }
 

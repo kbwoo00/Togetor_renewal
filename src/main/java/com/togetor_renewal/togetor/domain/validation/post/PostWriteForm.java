@@ -17,5 +17,6 @@ public class PostWriteForm {
     private String siDo;
     @NotBlank
     private String siGunGu;
+    @NotBlank
     private String eupMyeonDong;
 }

@@ -1,6 +1,8 @@
 package com.togetor_renewal.togetor.web.controller.post;
 
+import com.togetor_renewal.togetor.domain.entity.Category;
 import com.togetor_renewal.togetor.domain.entity.Post;
+import com.togetor_renewal.togetor.domain.repository.CategoryRepository;
 import com.togetor_renewal.togetor.domain.repository.PostRepository;
 import com.togetor_renewal.togetor.domain.repository.UserRepository;
 import com.togetor_renewal.togetor.domain.validation.post.PostWriteForm;
@@ -15,6 +17,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Controller
 @RequestMapping
 @Slf4j
@@ -23,6 +28,13 @@ public class PostController {
 
     private final UserRepository userRepository;
     private final PostRepository postRepository;
+    private final CategoryRepository categoryRepository;
+
+    @ModelAttribute("categoryList")
+    public List<Category> categories(){
+        List<Category> categoryList = categoryRepository.findAll();
+        return categoryList;
+    }
 
     @GetMapping("/posts")
     public String postList(){
@@ -45,8 +57,9 @@ public class PostController {
         }
 
         /**
-         * TO DO
-         * 지역들을 ArrayList로 만든다음에
+         * TODO
+         * 검증처리(HTML)에 에러메시지 띄울수 있도록하기
+         * 검증처리된 폼을 Post에 담아서 DB에 저장하기
          */
 
 
