@@ -20,7 +20,7 @@
 </div>
 <main>
     <h3 class="text-muted text-center mb-3">글쓰기</h3>
-    <form th:action action="/" th:object="${post}" method="post">
+    <form th:action action="/" th:object="${post}" method="post" th:enctype="multipart/form-data">
         <div class="container border rounded write-form">
             <div class="mb-3 mt-3">
                 <input type="text" class="form-control" th:field="*{title}" id="title" placeholder="제목을 입력해주세요"
