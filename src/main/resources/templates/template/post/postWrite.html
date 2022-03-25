@@ -6,6 +6,10 @@
         .write-form {
             max-width: 1000px;
         }
+        .field-error {
+            border-color: red;
+            color: red;
+        }
 
         .form-label {
             font-size: small;
@@ -20,14 +24,16 @@
 </div>
 <main>
     <h3 class="text-muted text-center mb-3">글쓰기</h3>
-    <form th:action action="/" th:object="${post}" method="post" th:enctype="multipart/form-data">
+    <form th:action action="/" th:object="${post}" method="post" enctype="multipart/form-data">
         <div class="container border rounded write-form">
             <div class="mb-3 mt-3">
-                <input type="text" class="form-control" th:field="*{title}" id="title" placeholder="제목을 입력해주세요"
-                       required>
+                <input type="text" th:errorclass="field-error" class="form-control" th:field="*{title}" id="title" placeholder="제목을 입력해주세요" required>
+                <div class="field-error" th:errors="*{title}">
+                   제목을 입력해주세요.
+                </div>
             </div>
 
-            <select class="form-select mb-3" required>
+            <select id="categoryTitle" name="categoryTitle" class="form-select mb-3" required>
                 <option value="">카테고리를 선택해주세요</option>
                 <option th:each="category : ${categoryList}" th:value="${category.title}"
                         th:text="${category.title}">카테고리</option>
@@ -37,7 +43,7 @@
                 <div class="col-md-auto">
                     <div class="row">
                         <div class="col-md-auto">
-                            <select id="siDo" class="form-select select-region" required>
+                            <select id="siDo" name="siDo" class="form-select select-region" required>
                                 <option class="text-muted" value="">지역을 선택하세요</option>
                                 <option value="서울특별시">서울특별시</option>
                                 <option value="부산광역시">부산광역시</option>
@@ -60,12 +66,12 @@
                             </select>
                         </div>
                         <div class="col-md-auto">
-                            <select disabled="disabled" id="siGunGu" class="form-select select-region" required>
+                            <select disabled="disabled" id="siGunGu" name="siGunGu" class="form-select select-region" required>
                                 <option>동네를 선택하세요</option>
                             </select>
                         </div>
                         <div class="col-md-auto">
-                            <select disabled="disabled" id="eupMyeonDong" class="form-select select-region" required>
+                            <select disabled="disabled" id="eupMyeonDong" name="eupMyeonDong" class="form-select select-region" required>
                                 <option>동을 선택하세요</option>
                             </select>
                         </div>
@@ -74,12 +80,15 @@
             </div>
 
             <div class="mb-3">
-                <label for="formFileSm" class="form-label fw-bold">관련 사진</label>
-                <input th:field="*{image}" class="form-control form-control-sm" id="formFileSm" type="file">
+                <label class="form-label fw-bold">관련 사진</label>
+                <input class="form-control form-control-sm" id="file" name="file" type="file">
             </div>
 
             <div class="mb-3">
-                <textarea id="summernote" required class="form-control" name="editordata" rows="15"></textarea>
+                <textarea th:errorclass="field-error" th:field="${post.content}" required class="form-control" name="editordata" rows="15"></textarea>
+                <div class="field-error" th:errors="*{content}">
+                    내용을 입력해주세요.
+                </div>
             </div>
 
             <div class="row justify-content-around mb-4">
