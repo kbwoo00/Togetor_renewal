@@ -61,6 +61,7 @@ public class PostController {
          * 검증처리(HTML)에 에러메시지 띄울수 있도록하기
          * 검증처리된 폼을 Post에 담아서 DB에 저장하기
          */
+        Post post = new Post();
 
 
         return "redirect:/";
