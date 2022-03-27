@@ -42,4 +42,16 @@ public class User {
         this.detailAddress = detailAddress;
         this.extraAddress = extraAddress;
     }
+
+    public User(String email, String pass, String name, String nickname, String phone, String postcode, String address, String detailAddress, String extraAddress) {
+        this.email = email;
+        this.pass = pass;
+        this.name = name;
+        this.nickname = nickname;
+        this.phone = phone;
+        this.postcode = postcode;
+        this.address = address;
+        this.detailAddress = detailAddress;
+        this.extraAddress = extraAddress;
+    }
 }
