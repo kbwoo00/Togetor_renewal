@@ -8,10 +8,10 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
 
-@RequiredArgsConstructor
-@Component
+//@RequiredArgsConstructor
+//@Component
 public class TestDataInit {
-    private final UserRepository userRepository;
+//    private final UserRepository userRepository;
 
     @PostConstruct
     public void testData() {
@@ -22,6 +22,6 @@ public class TestDataInit {
                 "kbw@na", "123", "123", "홍길동", "전우치입니다.", "01012345678",
                 "51265", "서우린머", "구로구로구로", null);
 
-        userRepository.save(user);
+//        userRepository.save(user);
     }
 }

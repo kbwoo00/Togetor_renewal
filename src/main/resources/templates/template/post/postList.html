@@ -12,15 +12,10 @@
 <body>
 <main>
     <div class="container">
-        <ul class="nav nav-tabs mb-3">
-            <li class="nav-item">
-                <a class="nav-link" href="#">운동</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link active" href="#">보드게임</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">노래방</a>
+        <ul class="nav nav-tabs mb-3 justify-content-center">
+            <li th:each="category : ${categoryList}" class="nav-item me-2">
+                <!-- class=active이면 회색으로 변함. -->
+                <a class="nav-link fw-bold fs-5" href="#" th:text="${category.title}">운동</a>
             </li>
         </ul>
         <div th:replace="~{template/fragments/select_region :: select}"></div>

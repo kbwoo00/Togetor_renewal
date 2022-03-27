@@ -100,6 +100,7 @@ public class UserController {
         // 로그인 성공 처리 세션처리
         HttpSession session = request.getSession(true); // true는 기존 세션이 있으면 세션을 반환, 없으면 신규 세션 생성
         session.setAttribute(Const.LOGIN_SESSION, loginUser);
+        session.setAttribute(Const.SESSION_USER_ID, loginUser.getId());
 
         return "redirect:" + redirectURL;
     }
