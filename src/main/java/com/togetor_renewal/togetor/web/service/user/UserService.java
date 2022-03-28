@@ -59,7 +59,7 @@ public class UserService {
         );
     }
 
-    public void withDrawalUser(Long userId){
+    public void withdrawalUser(Long userId){
         userRepository.deleteById(userId);
     }
 

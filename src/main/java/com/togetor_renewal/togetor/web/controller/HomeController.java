@@ -4,6 +4,7 @@ import com.togetor_renewal.togetor.domain.entity.Category;
 import com.togetor_renewal.togetor.domain.repository.CategoryRepository;
 import com.togetor_renewal.togetor.domain.repository.PostRepository;
 import com.togetor_renewal.togetor.web.Const;
+import com.togetor_renewal.togetor.web.service.post.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -18,13 +19,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class HomeController {
 
-    private final CategoryRepository categoryRepository;
-    private final PostRepository postRepository;
+    private final PostService postService;
 
     @GetMapping("/")
     public String home(Model model)
     {
-        List<Category> categories = categoryRepository.findAll();
+        List<Category> categories = postService.findAllCategory();
         model.addAttribute("categories", categories);
 
         log.info("CheckSuccess={}", model.getAttribute(Const.SUCCESS_CHECK));

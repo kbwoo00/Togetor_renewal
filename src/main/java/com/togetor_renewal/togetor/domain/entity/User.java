@@ -3,19 +3,17 @@ package com.togetor_renewal.togetor.domain.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter @NoArgsConstructor
-@Entity
+@Entity @Table(name = "USERS")
 public class User {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "USER_ID")
     private Long id;
-
     private LocalDateTime regdate;
     private String email;
     private String pass;
@@ -28,6 +26,8 @@ public class User {
     private String address;
     private String detailAddress;
     private String extraAddress;
+    @OneToMany(mappedBy = "user")
+    private List<Post> posts = new ArrayList<>();
 
     public User(LocalDateTime regdate, String email, String pass, String passConfirm, String name, String nickname, String phone, String postcode, String address, String detailAddress, String extraAddress) {
         this.regdate = regdate;

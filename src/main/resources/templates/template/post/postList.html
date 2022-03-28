@@ -7,6 +7,7 @@
         .post-info{
             font-size: small;
         }
+
     </style>
 </head>
 <body>
@@ -24,40 +25,26 @@
         <h3 class="text-center">현재 선택된 지역은 XX입니다.</h3>
 
         <div class="row mb-2 mt-4 me-0 p-0 g-0">
-            <div class="col-md-6">
-                <div class="row g-0 border rounded mb-4 shadow-sm h-md-250 post">
-                    <div class="col p-4 d-flex flex-column">
-                        <div class="row justify-content-between">
-                            <h3 class="mb-4 fs-3 fw-bold col-md">제목</h3>
-                            <div class="col-md-4 text-end">위치</div>
-                        </div>
-                        <p class="mb-4">내용 블라블라</p>
-                        <div class="row post-info">
-                            <div class="mb-1 col-md">작성자</div>
-                        </div>
-                        <div class="row post-info">
-                            <div class="mb-1 col-md-3 text-muted">댓글 수</div>
-                            <div class="mb-1 text-muted col-md-3 text-start">관심</div>
-                            <div class="mb-1 text-muted col-md-6 text-end">작성 시간</div>
-                        </div>
-                    </div>
-                </div>
+            <div th:if="${postList.size()} == 0">
+                <h2>해당 컨텐츠가 없습니다.</h2>
             </div>
-            <div class="col-md-6">
-                <div class="row g-0 border rounded mb-4 shadow-sm h-md-250 post">
+            <div th:each="post : ${postList}" class="col-md-6 h-25">
+                <div class="row g-0 border rounded mb-4 shadow-sm post">
                     <div class="col p-4 d-flex flex-column">
-                        <div class="row justify-content-between">
-                            <h3 class="mb-4 fs-3 fw-bold col-md">제목</h3>
-                            <div class="col-md-4 text-end">위치</div>
-                        </div>
-                        <p class="mb-4">내용 블라블라</p>
+                        <a class="text-decoration-none" th:href="@{/posts/{param1}/{param2}(param1=${post.categoryTitle}, param2=${post.id})}">
+                            <div class="row justify-content-between">
+                                <h3 th:text="${post.title}" class="mb-1 fs-3 fw-bold col-md-auto text-truncate">제목</h3>
+                            </div>
+                        </a>
+                        <p th:text="${post.siDo} + ' ' + ${post.siGunGu} + ' ' + ${post.eupMyeonDong}" class="mb-3 text-secondary">위치</p>
+                        <div class="mb-4 text-truncate col-md-auto content" th:text="${post.content}">내용 블라블라</div>
                         <div class="row post-info">
-                            <div class="mb-1 col-md">작성자</div>
+                            <div th:text="${post.user.nickname}" class="mb-1 col-md">작성자(연관관계 매핑필요)</div>
                         </div>
                         <div class="row post-info">
                             <div class="mb-1 col-md-3 text-muted">댓글 수</div>
                             <div class="mb-1 text-muted col-md-3 text-start">관심</div>
-                            <div class="mb-1 text-muted col-md-6 text-end">작성 시간</div>
+                            <div th:text="${post.regdate}" class="mb-1 text-muted col-md-6 text-end">작성 시간</div>
                         </div>
                     </div>
                 </div>

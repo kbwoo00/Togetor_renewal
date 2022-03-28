@@ -7,6 +7,7 @@ import com.togetor_renewal.togetor.domain.repository.PostRepository;
 import com.togetor_renewal.togetor.domain.repository.UserRepository;
 import com.togetor_renewal.togetor.domain.validation.post.PostWriteForm;
 import com.togetor_renewal.togetor.web.Const;
+import com.togetor_renewal.togetor.web.service.post.PostService;
 import com.togetor_renewal.togetor.web.service.post.S3FileUploadService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,29 +23,38 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping
 @Slf4j
 @RequiredArgsConstructor
 public class PostController {
-    private final PostRepository postRepository;
-    private final S3FileUploadService fileUploadService;
-    private final CategoryRepository categoryRepository;
+    private final PostService postService;
 
     @ModelAttribute("categoryList")
     public List<Category> categories(){
-        List<Category> categoryList = categoryRepository.findAll();
+        List<Category> categoryList = postService.findAllCategory();
         return categoryList;
     }
 
-    @GetMapping("/posts/{categoryTitle}")
-    public String postList(@PathVariable String categoryTitle){
+    @GetMapping("/posts/{categoryTitle}/{postId}")
+    public String post(@PathVariable String categoryTitle, @PathVariable String postId,  Model model){
+        Optional<Post> post = postService.findPostByPostId(Long.parseLong(postId));
+        // 해당 게시글 없을때 예외 페이지로 던지기
+        if (post.isEmpty()){
+            return "template/post/post-error";
+        }
 
-        /**
-         * TODO
-         * 카테고리
-         */
+        model.addAttribute("post", post.get());
+
+        return "template/post/postContent";
+    }
+
+    @GetMapping("/posts/{categoryTitle}")
+    public String postList(@PathVariable String categoryTitle, Model model){
+        List<Post> postList = postService.findPostByCategory(categoryTitle);
+        model.addAttribute("postList", postList);
         return "template/post/postList";
     }
 
@@ -58,7 +68,7 @@ public class PostController {
     public String postWrite(@Validated @ModelAttribute("post") PostWriteForm form,
                             HttpServletRequest request,
                             @RequestParam MultipartFile file,
-                            BindingResult bindingResult) throws IOException {
+                            BindingResult bindingResult, Model model) throws IOException {
         if (bindingResult.hasErrors()){
             log.info("err= {}", bindingResult);
             return "template/post/postWrite";
@@ -67,23 +77,9 @@ public class PostController {
         HttpSession session = request.getSession(false);
         Long userId = (Long) session.getAttribute(Const.SESSION_USER_ID);
 
-        LocalDateTime now = LocalDateTime.now();
-        Post post = new Post(
-                form.getTitle(),
-                form.getContent(),
-                LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(),now.getHour(), now.getMinute(), now.getSecond()),
-                null,
-                userId,
-                fileUploadService.upload(file),
-                form.getCategoryTitle(),
-                form.getSiDo(),
-                form.getSiGunGu(),
-                form.getEupMyeonDong()
-                );
+        postService.write(form, userId, file);
 
-        postRepository.save(post);
-
-        return "redirect:/";
+        return "template/post/write-success";
     }
 
 }

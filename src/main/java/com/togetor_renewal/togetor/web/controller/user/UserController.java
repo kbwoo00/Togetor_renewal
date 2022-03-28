@@ -105,12 +105,14 @@ public class UserController {
     }
 
     @GetMapping("/info/modify/{userId}")
-    public String modifyForm(@PathVariable Long userId, Model model,
+    public String modifyForm(@PathVariable String userId, Model model,
                              HttpServletRequest request, HttpServletResponse response) {
 
         HttpSession session = request.getSession(false);
-        // 내 정보를 로그인한 다른 유저가 보려고 할 때 막기
-        if (session.getAttribute(Const.SESSION_USER_ID) != userId) {
+        String sessionUserId = String.valueOf(session.getAttribute(Const.SESSION_USER_ID));
+
+        // 내 정보를 다른 유저가 조회또는 수정하려고 할 때 막기
+        if (!sessionUserId.equals(userId)) {
             response.setStatus(404);
             /**
              * TODO
@@ -120,16 +122,14 @@ public class UserController {
         }
 
         // 기존 회원정보들을 보이게 수정 시 참고할 수 있도록
-        User user = userService.findUserById(userId);
+        User user = userService.findUserById(Long.parseLong(userId));
         model.addAttribute("user", user);
 
-
-
-        return "/template/user/info-modify";
+        return "template/user/info-modify";
     }
 
     @PostMapping("/info/modify/{userId}")
-    public String modify(@Validated @ModelAttribute("user") UserModifyForm form, BindingResult bindingResult, HttpSession session) {
+    public String modify(@Validated @ModelAttribute("user") UserModifyForm form, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             log.info("err= {}", bindingResult);
             return "/template/user/info-modify";
@@ -173,7 +173,7 @@ public class UserController {
     }
 
     @GetMapping("/withdrawal/{userId}")
-    public String withdrawalForm(@PathVariable Long userId, Model model,
+    public String withdrawalForm(@PathVariable String userId, Model model,
                                  HttpServletRequest request, HttpServletResponse response) {
 
         HttpSession session = request.getSession(false);
@@ -188,7 +188,7 @@ public class UserController {
         }
 
         // 기존 회원정보들을 보이게 수정 시 참고할 수 있도록
-        User user = userService.findUserById(userId);
+        User user = userService.findUserById(Long.parseLong(userId));
         model.addAttribute("user", user);
 
         if (model.getAttribute(Const.SUCCESS_CHECK) != null){
@@ -201,7 +201,7 @@ public class UserController {
 
     @PostMapping("/withdrawal/{userId}")
     public String withdrawal(@Validated @ModelAttribute("user") UserLoginForm form,
-                            BindingResult bindingResult,Model model, HttpServletRequest request, HttpServletResponse response) {
+                            BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response) {
 
         if (bindingResult.hasErrors()) {
             log.info("err= {}", bindingResult);
@@ -228,7 +228,7 @@ public class UserController {
         }
 
         session.invalidate();
-        userService.withDrawalUser(loginUser.getId());
+        userService.withdrawalUser(loginUser.getId());
 
         return "/template/user/withdrawal-success";
     }
