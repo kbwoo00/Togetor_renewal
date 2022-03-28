@@ -8,7 +8,6 @@ import javax.validation.constraints.NotBlank;
 @Data
 public class PostWriteForm {
     @NotBlank
-    @Max(value = 30, message = "30자까지 가능합니다.")
     private String title;
     @NotBlank
     private String content;

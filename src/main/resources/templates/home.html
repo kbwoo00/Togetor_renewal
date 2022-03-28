@@ -11,24 +11,33 @@
         <div th:replace="~{template/fragments/select_region :: select}"></div>
         <div class="row g-5 mt-2">
             <div th:each="category : ${categories}" class="col-md-6">
-                <div class="row border-bottom justify-content-between">
+                <div class="row justify-content-between">
                     <div class="col-md-auto">
-                        <h3 th:text="${category.title}">운동</h3>
+                        <h3 th:text="${category.title}">등산</h3>
                     </div>
                     <div class="col-md-auto p-2">
-                        <span><a href="/" class="text-decoration-none text-secondary">더보기</a></span>
+                        <span><a th:href="@{/posts/{param}(param=${category.title})}" href="/"
+                                 class="text-decoration-none text-secondary">더보기</a></span>
                     </div>
                 </div>
-                <ul class="list-unstyled mt-3">
-                    <li class="mb-2"><a href="/" class="text-decoration-none text-dark ">제목</a></li>
-                    <li class="mb-2"><a href="/" class="text-decoration-none text-dark ">내용2</a></li>
+                <ul class="list-unstyled">
+                    <li>
+                        <div class="row justify-content-between border">
+                            <a href="/" class="text-decoration-none text-dark col-md-auto">제목</a>
+                            <p class="col-md-auto">장소</p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="row justify-content-between border">
+                            <a href="/" class="text-decoration-none text-dark col-md-auto">제목</a>
+                            <p class="col-md-auto">장소</p>
+                        </div>
+                    </li>
                 </ul>
             </div>
         </div>
     </div>
-
 </main>
-
 </body>
 </html>
 

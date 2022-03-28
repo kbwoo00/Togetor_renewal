@@ -1,9 +1,9 @@
 package com.togetor_renewal.togetor.web.controller.user;
 
 import com.togetor_renewal.togetor.domain.entity.User;
-import com.togetor_renewal.togetor.domain.repository.UserRepository;
+import com.togetor_renewal.togetor.domain.validation.user.UserModifyForm;
 import com.togetor_renewal.togetor.web.Const;
-import com.togetor_renewal.togetor.web.service.user.LoginService;
+import com.togetor_renewal.togetor.web.service.user.UserService;
 import com.togetor_renewal.togetor.domain.validation.user.UserJoinForm;
 import com.togetor_renewal.togetor.domain.validation.user.UserLoginForm;
 import lombok.RequiredArgsConstructor;
@@ -15,8 +15,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Slf4j
@@ -25,55 +25,44 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final LoginService loginService;
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     @GetMapping("/join")
-    public String joinForm(Model model){
+    public String joinForm(Model model) {
         // 모델에 추가하지 않으면 joinForm에서 에러메시지들이 나타남
         model.addAttribute("user", new User());
         return "template/user/join";
     }
 
     @PostMapping("/join")
-    public String join(@Validated @ModelAttribute("user") UserJoinForm form, BindingResult bindingResult){
-
+    public String join(@Validated @ModelAttribute("user") UserJoinForm form, BindingResult bindingResult) {
         // 비밀번호 일치 확인 (GlobalError 검증 처리)
-        if (!form.getPass().equals(form.getPassConfirm())){
+        if (!form.getPass().equals(form.getPassConfirm())) {
             bindingResult.reject("passEquals");
             return "template/user/join";
         }
 
         // FieldError 검증 처리
-        if (bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             log.info("errors={} ", bindingResult);
             return "template/user/join";
         }
 
         // 아이디 중복체크
-        Optional<User> dupUser = userRepository.findByEmail(form.getEmail());
-        if (!dupUser.isEmpty()){
+        Optional<User> dupUser = userService.checkDuplicateEmail(form.getEmail());
+        if (!dupUser.isEmpty()) {
             bindingResult.rejectValue("email", "duplicated.user.email");
             return "template/user/join";
         }
 
-        // 검증 성공시 User 객체에 담아서 DB에 저장해야 된다.
-        LocalDateTime now = LocalDateTime.now();
-        User user = new User(
-                LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(),now.getHour(), now.getMinute(), now.getSecond()),
-                form.getEmail(), form.getPass(), form.getPassConfirm(),
-                form.getName(), form.getNickname(), form.getPhone(), form.getPostcode(),
-                form.getAddress(), form.getDetailAddress(), form.getExtraAddress()
-                );
-
-        // 만든 User 객체를 Repository(DB)에 저장하자
-        userRepository.save(user);
+        // 검증 성공 시 폼에서 받은 정보들을 DB에 저장
+        userService.join(form);
 
         return "redirect:/user/login";
     }
 
     @GetMapping("/login")
-    public String loginFrom(Model model){
+    public String loginFrom(Model model) {
         model.addAttribute("user", new User());
         return "template/user/login";
     }
@@ -82,16 +71,15 @@ public class UserController {
     public String login(@Validated @ModelAttribute("user") UserLoginForm form,
                         BindingResult bindingResult,
                         @RequestParam(defaultValue = "/") String redirectURL,
-                        HttpServletRequest request)
-    {
-        if (bindingResult.hasErrors()){
+                        HttpServletRequest request) {
+        if (bindingResult.hasErrors()) {
             log.info("err= {}", bindingResult);
             return "template/user/login";
         }
 
-        User loginUser = loginService.login(form.getEmail(), form.getPass());
+        User loginUser = userService.confirmUser(form.getEmail(), form.getPass());
 
-        if (loginUser == null){
+        if (loginUser == null) {
             bindingResult.reject("loginFail", "아이디 또는 비밀번호가 맞지 않습니다.");
             log.info("err= {}", bindingResult);
             return "template/user/login";
@@ -106,7 +94,7 @@ public class UserController {
     }
 
     @PostMapping("/logout")
-    public String logout(HttpServletRequest request){
+    public String logout(HttpServletRequest request) {
 
         //세션이 있으면 기존 세션 반환, 세션이 없으면 세션 생성하지 X
         HttpSession session = request.getSession(false);
@@ -114,5 +102,134 @@ public class UserController {
         if (session != null) session.invalidate();
 
         return "redirect:/";
+    }
+
+    @GetMapping("/info/modify/{userId}")
+    public String modifyForm(@PathVariable Long userId, Model model,
+                             HttpServletRequest request, HttpServletResponse response) {
+
+        HttpSession session = request.getSession(false);
+        // 내 정보를 로그인한 다른 유저가 보려고 할 때 막기
+        if (session.getAttribute(Const.SESSION_USER_ID) != userId) {
+            response.setStatus(404);
+            /**
+             * TODO
+             * 에러 예외페이지 처리
+             */
+            return "/template/user/info-error";
+        }
+
+        // 기존 회원정보들을 보이게 수정 시 참고할 수 있도록
+        User user = userService.findUserById(userId);
+        model.addAttribute("user", user);
+
+
+
+        return "/template/user/info-modify";
+    }
+
+    @PostMapping("/info/modify/{userId}")
+    public String modify(@Validated @ModelAttribute("user") UserModifyForm form, BindingResult bindingResult, HttpSession session) {
+        if (bindingResult.hasErrors()) {
+            log.info("err= {}", bindingResult);
+            return "/template/user/info-modify";
+        }
+
+        // 회원정보(현재 비밀번호)를 올바로 입력했는지 확인
+        User user = userService.confirmUser(form.getEmail(), form.getPass());
+        if (user == null) {
+            bindingResult.reject("wrongPassword", "등록된 회원의 비밀번호와 일치하지 않습니다.");
+            log.info("err= {}", bindingResult);
+            return "/template/user/info-modify";
+        }
+        form.setUserId(user.getId());
+
+        // 이메일 변경하고 싶어서 새로운 이메일 폼에 입력했을때
+        if (form.getNewEmail() != null) {
+            // 이메일 중복체크
+            Optional<User> existUser = userService.checkDuplicateEmail(form.getNewEmail());
+            if (existUser.isEmpty()) {
+                form.setEmail(form.getNewEmail());
+            } else {
+                bindingResult.rejectValue("email", "duplicated.user.email");
+                return "/template/user/info-modify";
+            }
+        }
+
+        // 만약 비밀번호 변경하고 싶으면 새로운 비밀번호를 폼에 입력햇는지 체크
+        if (form.getNewPass() != null) {
+            // 비밀번호 일치여부 체크
+            if (!form.getNewPass().equals(form.getNewPassConfirm())) {
+                bindingResult.reject("passEquals");
+                return "/template/user/info-modify";
+            }
+            form.setPass(form.getNewPass());
+        }
+
+        // 검증처리 성공시 유저정보 업데이트 로직
+        userService.modifyUser(form);
+
+        return "/template/user/modify-success";
+    }
+
+    @GetMapping("/withdrawal/{userId}")
+    public String withdrawalForm(@PathVariable Long userId, Model model,
+                                 HttpServletRequest request, HttpServletResponse response) {
+
+        HttpSession session = request.getSession(false);
+        // 내 정보를 로그인한 다른 유저가 보려고 할 때 막기
+        if (session.getAttribute(Const.SESSION_USER_ID) != userId) {
+            response.setStatus(404);
+            /**
+             * TODO
+             * 에러 예외페이지 처리
+             */
+            return "/template/user/info-error";
+        }
+
+        // 기존 회원정보들을 보이게 수정 시 참고할 수 있도록
+        User user = userService.findUserById(userId);
+        model.addAttribute("user", user);
+
+        if (model.getAttribute(Const.SUCCESS_CHECK) != null){
+            // 회원이 무사히 탈퇴하면 alert창 띄우기 위해
+            model.addAttribute("checkSuccess", true);
+        }
+
+        return "template/user/withdrawal";
+    }
+
+    @PostMapping("/withdrawal/{userId}")
+    public String withdrawal(@Validated @ModelAttribute("user") UserLoginForm form,
+                            BindingResult bindingResult,Model model, HttpServletRequest request, HttpServletResponse response) {
+
+        if (bindingResult.hasErrors()) {
+            log.info("err= {}", bindingResult);
+            return "template/user/withdrawal";
+        }
+
+        // 아이디 비밀번호가 올바른지
+        User loginUser = userService.confirmUser(form.getEmail(), form.getPass());
+        if (loginUser == null) {
+            bindingResult.reject("loginFail", "아이디 또는 비밀번호가 맞지 않습니다.");
+            log.info("err= {}", bindingResult);
+            return "template/user/withdrawal";
+        }
+
+        HttpSession session = request.getSession(false);
+        // 로그인한 유저와는 다른 회원을 탈퇴하려고 하면 예외페이지로
+        if (session.getAttribute(Const.SESSION_USER_ID) != loginUser.getId()) {
+            response.setStatus(404);
+            /**
+             * TODO
+             * 에러 예외페이지 처리
+             */
+            return "/template/user/info-error";
+        }
+
+        session.invalidate();
+        userService.withDrawalUser(loginUser.getId());
+
+        return "/template/user/withdrawal-success";
     }
 }

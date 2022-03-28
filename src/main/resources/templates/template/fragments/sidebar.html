@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:fragment="sidebar" class="col-md-3">
+    <ul class="list-group ">
+        <li class="p-4 list-group-item bg-primary fs-2 text-white">마이페이지</li>
+
+        <li class="pb-3 pt-3 list-group-item align-items-start list-group-item-secondary">
+            <div class="ms-2 me-auto">
+                <div class="fw-bold fs-4 mb-4">게시물 관리</div>
+                <a class="text-decoration-none a-tag" th:href href="/">
+                    <p class="mb-1 ">내가 쓴 글</p>
+                </a>
+                <a class="text-decoration-none a-tag" th:href href="/">
+                    <p class="mb-1 ">관심 있는 글</p>
+                </a>
+            </div>
+        </li>
+        <li class="pb-3 pt-3 list-group-item text-start list-group-item-secondary">
+            <div class="ms-2 me-auto">
+                <div class="fw-bold fs-4 mb-4">회원관리</div>
+                <a class="text-decoration-none a-tag" th:href="@{/user/info/modify/{param}(param=${session.userId})}" href="/">
+                    <p class="mb-1 ">회원정보 수정</p>
+                </a>
+                <a class="text-decoration-none a-tag" th:href="@{/user/withdrawal/{param}(param=${session.userId})}" href="/">
+                    <p class="mb-1 ">회원 탈퇴</p>
+                </a>
+            </div>
+        </li>
+        <li class="pb-3 pt-3 list-group-item text-start list-group-item-secondary">
+            <div class="ms-2 me-auto">
+                <div class="fw-bold fs-4 mb-4">기타</div>
+                <a class="text-decoration-none a-tag" th:href href="/">
+                    <p class="mb-1 ">기타항목</p>
+                </a>
+                <a class="text-decoration-none a-tag" th:href href="/">
+                    <p class="mb-1 ">기타항목</p>
+                </a>
+            </div>
+        </li>
+    </ul>
+</div>
+
+</body>
+</html>

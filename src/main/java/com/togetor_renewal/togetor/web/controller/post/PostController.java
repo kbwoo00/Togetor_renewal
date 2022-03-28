@@ -39,7 +39,8 @@ public class PostController {
     }
 
     @GetMapping("/posts/{categoryTitle}")
-    public String postList(){
+    public String postList(@PathVariable String categoryTitle){
+
         /**
          * TODO
          * 카테고리
