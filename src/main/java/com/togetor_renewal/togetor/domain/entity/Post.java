@@ -38,4 +38,17 @@ public class Post {
         this.siGunGu = siGunGu;
         this.eupMyeonDong = eupMyeonDong;
     }
+
+    public Post(String title, String content, LocalDateTime chgdate, User user, String categoryTitle, String image, String siDo, String siGunGu, String eupMyeonDong) {
+        this.title = title;
+        this.content = content;
+        this.chgdate = chgdate;
+        this.user = user;
+        this.categoryTitle = categoryTitle;
+        this.image = image;
+        this.siDo = siDo;
+        this.siGunGu = siGunGu;
+        this.eupMyeonDong = eupMyeonDong;
+    }
+
 }

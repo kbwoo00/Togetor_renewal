@@ -24,6 +24,17 @@ public class PostService {
     private final S3FileUploadService fileUploadService;
     private final UserRepository userRepository;
 
+    public List<Category> findAllCategory(){
+        return categoryRepository.findAll();
+    }
+    public List<Post> findPostByCategory(String categoryTitle){
+        return postRepository.findAllByCategoryTitle(categoryTitle);
+    }
+
+    public Optional<Post> findPostByPostId(Long postId) {
+        return postRepository.findById(postId);
+    }
+
     public void write(PostWriteForm form, Long userId, MultipartFile file) throws IOException {
 
         LocalDateTime now = LocalDateTime.now();
@@ -45,15 +56,25 @@ public class PostService {
 
     }
 
-    public List<Category> findAllCategory(){
-        return categoryRepository.findAll();
+    public void modifyPost(PostWriteForm form, String postId, MultipartFile file) throws IOException {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime chgdate = LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), now.getHour(), now.getMinute(), now.getSecond());
+
+
+        postRepository.updatePost(
+                form.getTitle(),
+                form.getContent(),
+                form.getCategoryTitle(),
+                chgdate,
+                fileUploadService.upload(file),
+                form.getSiDo(),
+                form.getSiGunGu(),
+                form.getEupMyeonDong(),
+                Long.parseLong(postId)
+        );
     }
 
-    public List<Post> findPostByCategory(String categoryTitle){
-       return postRepository.findAllByCategoryTitle(categoryTitle);
-    }
-
-    public Optional<Post> findPostByPostId(Long postId) {
-        return postRepository.findById(postId);
+    public void delete(Long postId) {
+        postRepository.deleteById(postId);
     }
 }

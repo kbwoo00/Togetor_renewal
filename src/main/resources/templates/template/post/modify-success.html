@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+<script th:inline="javascript">
+    const categoryTitle = [[${post.categoryTitle}]];
+    const postId = [[${postId}]];
+    alert('글이 성공적으로 수정되었습니다.');
+    window.location.href = '/posts/' + categoryTitle + '/' + postId;
+</script>
+</html>
