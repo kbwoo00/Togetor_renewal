@@ -62,7 +62,6 @@ public class PostController {
             model.addAttribute("writer", false);
         }
 
-
         return "template/post/postContent";
     }
 
@@ -70,6 +69,16 @@ public class PostController {
     public String postList(@PathVariable String categoryTitle, Model model) {
         List<Post> postList = postService.findPostByCategory(categoryTitle);
         model.addAttribute("postList", postList);
+        model.addAttribute("categoryTitle", categoryTitle);
+        return "template/post/postList";
+    }
+
+    @GetMapping("/posts/{categoryTitle}/{siDo}")
+    public String postListSido(@PathVariable String categoryTitle, @PathVariable String siDo, Model model){
+        List<Post> postList = postService.findPostsByCategoryTitleAndSido(categoryTitle, siDo);
+        model.addAttribute("postList", postList);
+        model.addAttribute("categoryTitle", categoryTitle);
+
         return "template/post/postList";
     }
 

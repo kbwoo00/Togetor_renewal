@@ -28,7 +28,7 @@ public class PostService {
         return categoryRepository.findAll();
     }
     public List<Post> findPostByCategory(String categoryTitle){
-        return postRepository.findAllByCategoryTitle(categoryTitle);
+        return postRepository.findAllByCategoryTitleOrderByIdDesc(categoryTitle);
     }
 
     public Optional<Post> findPostByPostId(Long postId) {
@@ -77,4 +77,10 @@ public class PostService {
     public void delete(Long postId) {
         postRepository.deleteById(postId);
     }
+
+    public List<Post> findPostsByCategoryTitleAndSido(String categoryTitle, String siDo) {
+        return postRepository.findAllByCategoryTitleAndSiDoOrderByIdDesc(categoryTitle, siDo);
+    }
+
+
 }
