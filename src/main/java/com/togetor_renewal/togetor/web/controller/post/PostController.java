@@ -1,6 +1,7 @@
 package com.togetor_renewal.togetor.web.controller.post;
 
 import com.togetor_renewal.togetor.domain.entity.Category;
+import com.togetor_renewal.togetor.domain.entity.District;
 import com.togetor_renewal.togetor.domain.entity.Post;
 import com.togetor_renewal.togetor.domain.entity.User;
 import com.togetor_renewal.togetor.domain.repository.CategoryRepository;
@@ -23,8 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 @RequestMapping
@@ -38,8 +38,16 @@ public class PostController {
         List<Category> categoryList = postService.findAllCategory();
         return categoryList;
     }
+    @ModelAttribute("sigunguList")
+    public List<District> siGunGus(){
+        return new ArrayList<District>();
+    }
+    @ModelAttribute("eupmyeondongList")
+    public List<District> eupMyeonDongs(){
+        return new ArrayList<District>();
+    }
 
-    @GetMapping("/posts/{categoryTitle}/{postId}")
+    @GetMapping("/post/{categoryTitle}/{postId}")
     public String post(@PathVariable String categoryTitle, @PathVariable String postId, Model model, HttpServletRequest request) {
         Optional<Post> post = postService.findPostByPostId(Long.parseLong(postId));
         // 해당 게시글 없을때 예외 페이지로 던지기
@@ -78,6 +86,53 @@ public class PostController {
         List<Post> postList = postService.findPostsByCategoryTitleAndSido(categoryTitle, siDo);
         model.addAttribute("postList", postList);
         model.addAttribute("categoryTitle", categoryTitle);
+
+        List<District> sigunguList = postService.findAllSigunguBySido(siDo);
+        model.addAttribute("sigunguList", sigunguList);
+
+        model.addAttribute("sido", siDo);
+
+        return "template/post/postList";
+    }
+
+    @GetMapping("/posts/{categoryTitle}/{siDo}/{siGunGu}")
+    public String postListSigungu(@PathVariable String categoryTitle,
+                                  @PathVariable String siDo,
+                                  @PathVariable String siGunGu,
+                                  Model model){
+        List<Post> postList = postService.findPostsByCategoryTitleAndSidoAndSigungu(categoryTitle, siDo, siGunGu);
+        model.addAttribute("postList", postList);
+        model.addAttribute("categoryTitle", categoryTitle);
+
+        List<District> sigunguList = postService.findAllSigunguBySido(siDo);
+        model.addAttribute("sigunguList", sigunguList);
+        List<District> eupmyeondongList = postService.findAllEupmyeondongBySidoAndSigungu(siDo, siGunGu);
+        model.addAttribute("eupmyeondongList", eupmyeondongList);
+
+        model.addAttribute("sido", siDo);
+        model.addAttribute("sigungu", siGunGu);
+
+        return "template/post/postList";
+    }
+
+    @GetMapping("/posts/{categoryTitle}/{siDo}/{siGunGu}/{eupMyeonDong}")
+    public String postListEupmyeondong(@PathVariable String categoryTitle,
+                                       @PathVariable String siDo,
+                                       @PathVariable String siGunGu,
+                                       @PathVariable String eupMyeonDong,
+                                       Model model){
+        List<Post> postList = postService.findPostsByCategoryTitleAndSidoAndSigunguAndEupmyeondong(categoryTitle, siDo, siGunGu, eupMyeonDong);
+        model.addAttribute("postList", postList);
+        model.addAttribute("categoryTitle", categoryTitle);
+
+        List<District> sigunguList = postService.findAllSigunguBySido(siDo);
+        model.addAttribute("sigunguList", sigunguList);
+        List<District> eupmyeondongList = postService.findAllEupmyeondongBySidoAndSigungu(siDo, siGunGu);
+        model.addAttribute("eupmyeondongList", eupmyeondongList);
+
+        model.addAttribute("sido", siDo);
+        model.addAttribute("sigungu", siGunGu);
+        model.addAttribute("eupmyeondong", eupMyeonDong);
 
         return "template/post/postList";
     }

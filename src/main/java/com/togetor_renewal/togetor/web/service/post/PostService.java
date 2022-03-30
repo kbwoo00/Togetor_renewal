@@ -1,9 +1,11 @@
 package com.togetor_renewal.togetor.web.service.post;
 
 import com.togetor_renewal.togetor.domain.entity.Category;
+import com.togetor_renewal.togetor.domain.entity.District;
 import com.togetor_renewal.togetor.domain.entity.Post;
 import com.togetor_renewal.togetor.domain.entity.User;
 import com.togetor_renewal.togetor.domain.repository.CategoryRepository;
+import com.togetor_renewal.togetor.domain.repository.DistrictRepository;
 import com.togetor_renewal.togetor.domain.repository.PostRepository;
 import com.togetor_renewal.togetor.domain.repository.UserRepository;
 import com.togetor_renewal.togetor.domain.validation.post.PostWriteForm;
@@ -20,6 +22,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class PostService {
     private final PostRepository postRepository;
+    private final DistrictRepository districtRepository;
     private final CategoryRepository categoryRepository;
     private final S3FileUploadService fileUploadService;
     private final UserRepository userRepository;
@@ -83,4 +86,19 @@ public class PostService {
     }
 
 
+    public List<Post> findPostsByCategoryTitleAndSidoAndSigungu(String categoryTitle, String siDo, String siGunGu) {
+        return postRepository.findAllByCategoryTitleAndSiDoAndSiGunGuOrderByIdDesc(categoryTitle, siDo, siGunGu);
+    }
+
+    public List<Post> findPostsByCategoryTitleAndSidoAndSigunguAndEupmyeondong(String categoryTitle, String siDo, String siGunGu, String eupMyeonDong) {
+        return postRepository.findAllByCategoryTitleAndSiDoAndSiGunGuAndEupMyeonDongOrderByIdDesc(categoryTitle, siDo, siGunGu, eupMyeonDong);
+    }
+
+    public List<District> findAllSigunguBySido(String siDo) {
+        return districtRepository.findAllBySiDoAndSiGunGuIsNotNullAndEupMyeonDongIsNull(siDo);
+    }
+
+    public List<District> findAllEupmyeondongBySidoAndSigungu(String siDo, String siGunGu){
+        return districtRepository.findAllBySiDoAndSiGunGuAndEupMyeonDongIsNotNull(siDo, siGunGu);
+    }
 }

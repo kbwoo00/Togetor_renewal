@@ -16,6 +16,8 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findAllByCategoryTitleOrderByIdDesc(String categoryTitle);
     Optional<Post> findById(Long postId);
     List<Post> findAllByCategoryTitleAndSiDoOrderByIdDesc(String categoryTitle, String siDo);
+    List<Post> findAllByCategoryTitleAndSiDoAndSiGunGuOrderByIdDesc(String categoryTitle, String siDo, String siGunGu);
+    List<Post> findAllByCategoryTitleAndSiDoAndSiGunGuAndEupMyeonDongOrderByIdDesc(String categoryTitle, String siDo, String siGunGu, String eupMyeonDong);
 
 
     @Transactional

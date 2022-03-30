@@ -177,8 +177,9 @@ public class UserController {
                                  HttpServletRequest request, HttpServletResponse response) {
 
         HttpSession session = request.getSession(false);
+        String sessionUserId = String.valueOf(session.getAttribute(Const.SESSION_USER_ID));
         // 내 정보를 로그인한 다른 유저가 보려고 할 때 막기
-        if (session.getAttribute(Const.SESSION_USER_ID) != userId) {
+        if (!sessionUserId.equals(userId)) {
             response.setStatus(404);
             /**
              * TODO

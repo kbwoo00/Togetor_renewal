@@ -34,15 +34,15 @@
                     </select>
                 </div>
                 <div class="col-md-auto">
-                    <select id="siGunGuSel" class="form-select select-region" required>
+                    <select th:unless="${sigunguList.isEmpty()}" id="siGunGuSel" class="form-select select-region" required>
                         <option value="">동네를 선택하세요</option>
-                        <option>United States</option>
+                        <option th:each="sigungu : ${sigunguList}" th:value="${sigungu.siGunGu}" th:text="${sigungu.siGunGu}">United States</option>
                     </select>
                 </div>
                 <div class="col-md-auto">
-                    <select id="eupMyeonDongSel" class="form-select select-region" required>
+                    <select th:unless="${eupmyeondongList.isEmpty()}" id="eupMyeonDongSel" class="form-select select-region" required>
                         <option value="">동을 선택하세요</option>
-                        <option>United States</option>
+                        <option th:each="eupmyeondong : ${eupmyeondongList}" th:value="${eupmyeondong.eupMyeonDong}" th:text="${eupmyeondong.eupMyeonDong}">United States</option>
                     </select>
                 </div>
             </div>

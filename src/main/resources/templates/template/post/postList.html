@@ -8,6 +8,7 @@
         .post-info{
             font-size: small;
         }
+
     </style>
     <link th:href="@{/css/bootstrap.min.css}" href="/templates/css/bootstrap.min.css" rel="stylesheet"/>
 </head>
@@ -26,7 +27,9 @@
             </li>
         </ul>
         <div th:replace="~{template/fragments/select_region :: select}"></div>
-        <h3 class="text-center">현재 선택된 지역은 XX입니다.</h3>
+        <h3 class="text-center" th:if="${siDo != null && siGunGu != null && eupMyeonDong != null}" th:text="|현재 선택된 지역은 ${siDo} ${siGunGu} ${eupMyeonDong} 입니다.|">현재 선택된 지역은 XX입니다.</h3>
+        <h3 class="text-center" th:if="${siDo != null && siGunGu != null && eupMyeonDong == null}" th:text="|현재 선택된 지역은 ${siDo} ${siGunGu} 입니다.|">현재 선택된 지역은 XX입니다.</h3>
+        <h3 class="text-center" th:if="${siDo != null && siGunGu == null && eupMyeonDong == null}" th:text="|현재 선택된 지역은 ${siDo} 입니다.|">현재 선택된 지역은 XX입니다.</h3>
 
         <div class="row mb-2 mt-4 me-0 p-0 g-0">
             <div th:if="${postList.size()} == 0">
@@ -35,7 +38,7 @@
             <div th:each="post : ${postList}" class="col-md-6 h-25">
                 <div class="row g-0 border rounded mb-4 shadow-sm post">
                     <div class="col p-4 d-flex flex-column">
-                        <a class="text-decoration-none" th:href="@{/posts/{param1}/{param2}(param1=${post.categoryTitle}, param2=${post.id})}">
+                        <a class="text-decoration-none" th:href="@{/post/{param1}/{param2}(param1=${post.categoryTitle}, param2=${post.id})}">
                             <div class="row justify-content-between">
                                 <h3 th:text="${post.title}" class="mb-1 fs-3 fw-bold col-md-auto text-truncate">제목</h3>
                             </div>
@@ -74,15 +77,40 @@
     <footer th:replace="~{template/fragments/footer :: footer}"></footer>
 </div>
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-<!--<script th:inline="javascript">-->
-<!--    $(document).ready(function (){-->
-<!--        $("#siDoSel").change(function (){-->
-<!--            const categoryTitle = [[${categoryTitle}]];-->
-<!--            const selectedSido = $("#siDoSel option:selected").val();-->
-<!--            window.location.href = '/posts/' + categoryTitle + '/' + selectedSido;-->
-<!--        })-->
-<!--    });-->
-<!--</script>-->
+<script th:inline="javascript">
+
+    $(document).ready(function (){
+        const categoryTitle = [[${categoryTitle}]];
+        const siDo = [[${siDo}]];
+        const siGunGu = [[${siGunGu}]];
+        const eupMyeonDong = [[${eupMyeonDong}]];
+        $("#siDoSel").val(siDo).prop("selected", true);
+        $("#siGunGuSel").val(siGunGu).prop("selected", true);
+        $("#eupMyeonDongSel").val(eupMyeonDong).prop("selected", true);
+
+
+        $("#siDoSel").change(function (){
+            const selectedSido = $("#siDoSel option:selected").val();
+
+            window.location.href = '/posts/' + categoryTitle + '/' + selectedSido;
+        });
+
+        $("#siGunGuSel").change(function (){
+            const selectedSigungu = $("#siGunGuSel option:selected").val();
+
+            window.location.href = '/posts/' + categoryTitle + '/' + siDo + '/' + selectedSigungu;
+        });
+
+        $("#eupMyeonDongSel").change(function (){
+            const selectedEupmyeondong = $("#eupMyeonDongSel option:selected").val();
+
+            window.location.href = '/posts/' + categoryTitle + '/' + siDo + '/' + siGunGu + '/' + selectedEupmyeondong;
+        });
+
+
+
+    });
+</script>
 <script th:src="@{/js/bootstrap.bundle.min.js}" src="/templates/js/bootstrap.bundle.min.js"/>
 
 </body>
