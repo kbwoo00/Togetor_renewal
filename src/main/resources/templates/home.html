@@ -8,9 +8,8 @@
 <body>
 <main>
     <div class="container">
-        <div th:replace="~{template/fragments/select_region :: select}"></div>
         <div class="row g-5 mt-2">
-            <div th:each="category : ${categories}" class="col-md-6">
+            <div th:each="category : ${categoryList}" class="col-md-6">
                 <div class="row justify-content-between">
                     <div class="col-md-auto">
                         <h3 th:text="${category.title}">등산</h3>
@@ -21,16 +20,12 @@
                     </div>
                 </div>
                 <ul class="list-unstyled">
-                    <li>
-                        <div class="row justify-content-between border">
-                            <a href="/" class="text-decoration-none text-dark col-md-auto">제목</a>
-                            <p class="col-md-auto">장소</p>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="row justify-content-between border">
-                            <a href="/" class="text-decoration-none text-dark col-md-auto">제목</a>
-                            <p class="col-md-auto">장소</p>
+                    <li th:each="post : ${postList}">
+                        <div th:if="${post.categoryTitle == category.title}" class="row justify-content-between border">
+                            <a th:text="${post.title}" th:href="@{/post/{param1}/{param2}(param1=${post.categoryTitle}, param2=${post.id})}" href="/" class="text-decoration-none text-dark col-md-auto">
+                                제목
+                            </a>
+                            <p th:text="|${post.siDo} ${post.siGunGu} ${post.eupMyeonDong}|" class="col-md-auto">장소</p>
                         </div>
                     </li>
                 </ul>

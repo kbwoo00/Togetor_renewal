@@ -21,6 +21,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Page<Post> findAllByCategoryTitleAndSiDoAndSiGunGuOrderByIdDesc(String categoryTitle, String siDo, String siGunGu, Pageable pageable);
     Page<Post> findAllByCategoryTitleAndSiDoAndSiGunGuAndEupMyeonDongOrderByIdDesc(String categoryTitle, String siDo, String siGunGu, String eupMyeonDong, Pageable pageable);
 
+    List<Post> findFirst5ByCategoryTitleOrderByIdDesc(String categoryTitle);
 
     @Transactional
     @Modifying

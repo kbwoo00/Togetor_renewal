@@ -35,8 +35,9 @@ public class PostService {
     public List<Category> findAllCategory(){
         return categoryRepository.findAll();
     }
-    public Page<Post> findPostByCategoryPage(String categoryTitle, Pageable pageable){
-        return postRepository.findAllByCategoryTitleOrderByIdDesc(categoryTitle, pageable);
+
+    public List<Post> findFivePostsByCategory(String categoryTitle){
+        return postRepository.findFirst5ByCategoryTitleOrderByIdDesc(categoryTitle);
     }
 
     public Optional<Post> findPostByPostId(Long postId) {
@@ -85,20 +86,20 @@ public class PostService {
     public void delete(Long postId) {
         postRepository.deleteById(postId);
     }
+    public Page<Post> findPostByCategoryPage(String categoryTitle, Pageable pageable){
+        return postRepository.findAllByCategoryTitleOrderByIdDesc(categoryTitle, pageable);
+    }
 
-    public Page<Post> findPostsByCategoryTitleAndSido(String categoryTitle, String siDo) {
-        Pageable pageable = PageRequest.of(0, Const.PAGE_SIZE);
+    public Page<Post> findPostsByCategoryTitleAndSido(String categoryTitle, String siDo, Pageable pageable) {
         return postRepository.findAllByCategoryTitleAndSiDoOrderByIdDesc(categoryTitle, siDo, pageable);
     }
 
 
-    public Page<Post> findPostsByCategoryTitleAndSidoAndSigungu(String categoryTitle, String siDo, String siGunGu) {
-        Pageable pageable = PageRequest.of(0, Const.PAGE_SIZE);
+    public Page<Post> findPostsByCategoryTitleAndSidoAndSigungu(String categoryTitle, String siDo, String siGunGu, Pageable pageable) {
         return postRepository.findAllByCategoryTitleAndSiDoAndSiGunGuOrderByIdDesc(categoryTitle, siDo, siGunGu, pageable);
     }
 
-    public Page<Post> findPostsByCategoryTitleAndSidoAndSigunguAndEupmyeondong(String categoryTitle, String siDo, String siGunGu, String eupMyeonDong) {
-        Pageable pageable = PageRequest.of(0, Const.PAGE_SIZE);
+    public Page<Post> findPostsByCategoryTitleAndSidoAndSigunguAndEupmyeondong(String categoryTitle, String siDo, String siGunGu, String eupMyeonDong, Pageable pageable) {
         return postRepository.findAllByCategoryTitleAndSiDoAndSiGunGuAndEupMyeonDongOrderByIdDesc(categoryTitle, siDo, siGunGu, eupMyeonDong, pageable);
     }
 

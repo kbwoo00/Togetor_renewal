@@ -98,7 +98,7 @@ public class PostController {
 
     @GetMapping("/posts/{categoryTitle}/{siDo}")
     public String postListSido(@PathVariable String categoryTitle, @PathVariable String siDo, Model model, @PageableDefault(size = 1) Pageable pageable){
-        Page<Post> postList = postService.findPostsByCategoryTitleAndSido(categoryTitle, siDo);
+        Page<Post> postList = postService.findPostsByCategoryTitleAndSido(categoryTitle, siDo, pageable);
         addPostsModel(postList, model);
 
         model.addAttribute("categoryTitle", categoryTitle);
@@ -117,7 +117,7 @@ public class PostController {
                                   @PathVariable String siGunGu,
                                   Model model,
                                   @PageableDefault(size = 1) Pageable pageable){
-        Page<Post> postList = postService.findPostsByCategoryTitleAndSidoAndSigungu(categoryTitle, siDo, siGunGu);
+        Page<Post> postList = postService.findPostsByCategoryTitleAndSidoAndSigungu(categoryTitle, siDo, siGunGu, pageable);
         addPostsModel(postList, model);
         model.addAttribute("categoryTitle", categoryTitle);
 
@@ -139,7 +139,7 @@ public class PostController {
                                        @PathVariable String eupMyeonDong,
                                        Model model,
                                        @PageableDefault(size = 1) Pageable pageable){
-        Page<Post> postList = postService.findPostsByCategoryTitleAndSidoAndSigunguAndEupmyeondong(categoryTitle, siDo, siGunGu, eupMyeonDong);
+        Page<Post> postList = postService.findPostsByCategoryTitleAndSidoAndSigunguAndEupmyeondong(categoryTitle, siDo, siGunGu, eupMyeonDong, pageable);
         addPostsModel(postList, model);
 
         model.addAttribute("categoryTitle", categoryTitle);
