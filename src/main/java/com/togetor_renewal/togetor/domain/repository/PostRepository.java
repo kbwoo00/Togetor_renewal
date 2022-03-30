@@ -1,6 +1,8 @@
 package com.togetor_renewal.togetor.domain.repository;
 
 import com.togetor_renewal.togetor.domain.entity.Post;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -13,11 +15,11 @@ import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
 
-    List<Post> findAllByCategoryTitleOrderByIdDesc(String categoryTitle);
     Optional<Post> findById(Long postId);
-    List<Post> findAllByCategoryTitleAndSiDoOrderByIdDesc(String categoryTitle, String siDo);
-    List<Post> findAllByCategoryTitleAndSiDoAndSiGunGuOrderByIdDesc(String categoryTitle, String siDo, String siGunGu);
-    List<Post> findAllByCategoryTitleAndSiDoAndSiGunGuAndEupMyeonDongOrderByIdDesc(String categoryTitle, String siDo, String siGunGu, String eupMyeonDong);
+    Page<Post> findAllByCategoryTitleOrderByIdDesc(String categoryTitle, Pageable pageable);
+    Page<Post> findAllByCategoryTitleAndSiDoOrderByIdDesc(String categoryTitle, String siDo, Pageable pageable);
+    Page<Post> findAllByCategoryTitleAndSiDoAndSiGunGuOrderByIdDesc(String categoryTitle, String siDo, String siGunGu, Pageable pageable);
+    Page<Post> findAllByCategoryTitleAndSiDoAndSiGunGuAndEupMyeonDongOrderByIdDesc(String categoryTitle, String siDo, String siGunGu, String eupMyeonDong, Pageable pageable);
 
 
     @Transactional

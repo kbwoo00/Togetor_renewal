@@ -9,7 +9,12 @@ import com.togetor_renewal.togetor.domain.repository.DistrictRepository;
 import com.togetor_renewal.togetor.domain.repository.PostRepository;
 import com.togetor_renewal.togetor.domain.repository.UserRepository;
 import com.togetor_renewal.togetor.domain.validation.post.PostWriteForm;
+import com.togetor_renewal.togetor.web.Const;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,8 +35,8 @@ public class PostService {
     public List<Category> findAllCategory(){
         return categoryRepository.findAll();
     }
-    public List<Post> findPostByCategory(String categoryTitle){
-        return postRepository.findAllByCategoryTitleOrderByIdDesc(categoryTitle);
+    public Page<Post> findPostByCategoryPage(String categoryTitle, Pageable pageable){
+        return postRepository.findAllByCategoryTitleOrderByIdDesc(categoryTitle, pageable);
     }
 
     public Optional<Post> findPostByPostId(Long postId) {
@@ -81,17 +86,20 @@ public class PostService {
         postRepository.deleteById(postId);
     }
 
-    public List<Post> findPostsByCategoryTitleAndSido(String categoryTitle, String siDo) {
-        return postRepository.findAllByCategoryTitleAndSiDoOrderByIdDesc(categoryTitle, siDo);
+    public Page<Post> findPostsByCategoryTitleAndSido(String categoryTitle, String siDo) {
+        Pageable pageable = PageRequest.of(0, Const.PAGE_SIZE);
+        return postRepository.findAllByCategoryTitleAndSiDoOrderByIdDesc(categoryTitle, siDo, pageable);
     }
 
 
-    public List<Post> findPostsByCategoryTitleAndSidoAndSigungu(String categoryTitle, String siDo, String siGunGu) {
-        return postRepository.findAllByCategoryTitleAndSiDoAndSiGunGuOrderByIdDesc(categoryTitle, siDo, siGunGu);
+    public Page<Post> findPostsByCategoryTitleAndSidoAndSigungu(String categoryTitle, String siDo, String siGunGu) {
+        Pageable pageable = PageRequest.of(0, Const.PAGE_SIZE);
+        return postRepository.findAllByCategoryTitleAndSiDoAndSiGunGuOrderByIdDesc(categoryTitle, siDo, siGunGu, pageable);
     }
 
-    public List<Post> findPostsByCategoryTitleAndSidoAndSigunguAndEupmyeondong(String categoryTitle, String siDo, String siGunGu, String eupMyeonDong) {
-        return postRepository.findAllByCategoryTitleAndSiDoAndSiGunGuAndEupMyeonDongOrderByIdDesc(categoryTitle, siDo, siGunGu, eupMyeonDong);
+    public Page<Post> findPostsByCategoryTitleAndSidoAndSigunguAndEupmyeondong(String categoryTitle, String siDo, String siGunGu, String eupMyeonDong) {
+        Pageable pageable = PageRequest.of(0, Const.PAGE_SIZE);
+        return postRepository.findAllByCategoryTitleAndSiDoAndSiGunGuAndEupMyeonDongOrderByIdDesc(categoryTitle, siDo, siGunGu, eupMyeonDong, pageable);
     }
 
     public List<District> findAllSigunguBySido(String siDo) {
