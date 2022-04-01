@@ -1,7 +1,7 @@
 package com.togetor_renewal.togetor.web.controller.post;
 
+import com.togetor_renewal.togetor.domain.DTO.post.CommentDTO;
 import com.togetor_renewal.togetor.domain.entity.Category;
-import com.togetor_renewal.togetor.domain.entity.Comment;
 import com.togetor_renewal.togetor.domain.entity.District;
 import com.togetor_renewal.togetor.domain.entity.Post;
 import com.togetor_renewal.togetor.domain.DTO.post.PostWriteForm;
@@ -69,7 +69,8 @@ public class PostController {
             model.addAttribute("writer", false);
         }
 
-//        List<Comment> commentList = commentService.commentList(post.get());
+        List<CommentDTO> commentList = commentService.commentList(post.get().getId());
+        model.addAttribute("commentList", commentList);
 
         return "template/post/postContent";
     }
@@ -79,13 +80,24 @@ public class PostController {
         if (post.isEmpty()){
             return "template/post/post-error";
         }
-        commentService.write(post.get(), post.get().getUser(), content);
+        commentService.commentWrite(post.get(), post.get().getUser(), content);
 
         model.addAttribute("postId", postId);
 
         return "template/post/comment-write-success";
     }
+    @PostMapping("/post/{postId}/recomment")
+    public String recommentWrite(@PathVariable String postId, Model model, @RequestParam String content){
+        Optional<Post> post = postService.findPostByPostId(Long.parseLong(postId));
+        if (post.isEmpty()){
+            return "template/post/post-error";
+        }
+        commentService.recommentWrite(post.get(), post.get().getUser(), content);
 
+        model.addAttribute("postId", postId);
+
+        return "template/post/comment-write-success";
+    }
     @GetMapping("/posts/{categoryTitle}")
     public String postList(@PathVariable String categoryTitle, Model model) {
 

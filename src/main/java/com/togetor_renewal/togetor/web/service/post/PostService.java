@@ -9,7 +9,6 @@ import com.togetor_renewal.togetor.domain.repository.DistrictRepository;
 import com.togetor_renewal.togetor.domain.repository.PostRepository;
 import com.togetor_renewal.togetor.domain.repository.UserRepository;
 import com.togetor_renewal.togetor.domain.DTO.post.PostWriteForm;
-import com.togetor_renewal.togetor.web.Const;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -46,8 +45,6 @@ public class PostService {
         Post post = new Post(
                 form.getTitle(),
                 form.getContent(),
-                Const.now,
-                null,
                 user.getNickname(),
                 fileUploadService.upload(file),
                 form.getCategoryTitle(),

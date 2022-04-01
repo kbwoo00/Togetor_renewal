@@ -28,9 +28,7 @@ public class UserService {
 
     public void join(UserJoinForm form) {
         // 검증 성공시 User 객체에 담아서 DB에 저장해야 된다.
-        LocalDateTime now = LocalDateTime.now();
         User user = new User(
-                LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), now.getHour(), now.getMinute(), now.getSecond()),
                 form.getEmail(), form.getPass(), form.getPassConfirm(),
                 form.getName(), form.getNickname(), form.getPhone(), form.getPostcode(),
                 form.getAddress(), form.getDetailAddress(), form.getExtraAddress()

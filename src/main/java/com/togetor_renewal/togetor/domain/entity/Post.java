@@ -11,14 +11,12 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @Getter @Table(name = "POSTS")
-public class Post {
+public class Post extends BaseTimeEntity{
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "POST_ID")
     private Long id;
     private String title;
     private String content;
-    private LocalDateTime regdate;
-    private LocalDateTime chgdate;
     private String categoryTitle;
     private String image;
     private String siDo;
@@ -32,11 +30,9 @@ public class Post {
     @OneToMany(mappedBy = "post")
     private List<Comment> comments = new ArrayList<>();
 
-    public Post(String title, String content, LocalDateTime regdate, LocalDateTime chgdate, String writer, String image, String categoryTitle, String siDo, String siGunGu, String eupMyeonDong, User user) {
+    public Post(String title, String content, String writer, String image, String categoryTitle, String siDo, String siGunGu, String eupMyeonDong, User user) {
         this.title = title;
         this.content = content;
-        this.regdate = regdate;
-        this.chgdate = chgdate;
         this.writer = writer;
         this.image = image;
         this.categoryTitle = categoryTitle;
@@ -46,10 +42,9 @@ public class Post {
         this.user = user;
     }
 
-    public Post(String title, String content, LocalDateTime chgdate, String categoryTitle, String image, String siDo, String siGunGu, String eupMyeonDong) {
+    public Post(String title, String content, String categoryTitle, String image, String siDo, String siGunGu, String eupMyeonDong) {
         this.title = title;
         this.content = content;
-        this.chgdate = chgdate;
         this.categoryTitle = categoryTitle;
         this.image = image;
         this.siDo = siDo;

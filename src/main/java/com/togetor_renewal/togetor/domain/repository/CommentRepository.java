@@ -12,8 +12,8 @@ import java.util.Optional;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
-//    @Query("select c from Comment c join fetch c.post order by c.commSeq, c.recommSeq")
-//    List<Comment> findComments(Post post);
+    @Query("select c from Comment c join fetch c.post p where p.id= :postId order by c.commSeq, c.recommSeq")
+    List<Comment> findCommentsByPost(@Param("postId") Long postId);
 
     Optional<Comment> findFirstByPostOrderByCommSeqDesc(Post post);
 

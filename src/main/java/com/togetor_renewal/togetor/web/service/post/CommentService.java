@@ -1,5 +1,6 @@
 package com.togetor_renewal.togetor.web.service.post;
 
+import com.togetor_renewal.togetor.domain.DTO.post.CommentDTO;
 import com.togetor_renewal.togetor.domain.entity.Comment;
 import com.togetor_renewal.togetor.domain.entity.Post;
 import com.togetor_renewal.togetor.domain.entity.User;
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,11 +19,24 @@ import java.util.Optional;
 public class CommentService {
     private final CommentRepository commentRepository;
 
-//    public List<Comment> commentList(Post post){
-//        return commentRepository.findComments(post);
-//    }
+    public List<CommentDTO> commentList(Long postId){
+        List<Comment> commentList = commentRepository.findCommentsByPost(postId);
+        List<CommentDTO> commentDTOList = new ArrayList<>();
 
-    public void write(Post post, User user, String content) {
+        for (Comment comment : commentList) {
+            CommentDTO commentDTO = new CommentDTO(
+                    comment.getContent(),
+                    comment.getUser().getNickname(),
+                    comment.getRegdate()
+            );
+
+            commentDTOList.add(commentDTO);
+        }
+
+        return commentDTOList;
+    }
+
+    public void commentWrite(Post post, User user, String content) {
         // 가장 최신 댓글 찾기
         Optional<Comment> recentComment = commentRepository.findFirstByPostOrderByCommSeqDesc(post);
         Comment comment;
@@ -31,7 +46,6 @@ public class CommentService {
                     content,
                     1,
                     1,
-                    Const.now,
                     post,
                     user
             );
@@ -40,12 +54,16 @@ public class CommentService {
                     content,
                     recentComment.get().getCommSeq() + 1,
                     1,
-                    Const.now,
                     post,
                     user
             );
         }
 
         commentRepository.save(comment);
+    }
+
+
+    public void recommentWrite(Post post, User user, String content) {
+
     }
 }

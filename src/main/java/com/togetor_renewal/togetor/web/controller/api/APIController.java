@@ -30,11 +30,9 @@ public class APIController {
         return districtList;
     }
 
-    @PostMapping(value = "/posts/{categoryTitle}")
+    @PostMapping("/posts/{categoryTitle}")
     public List<PostCategory> postCategoryList(@PathVariable String categoryTitle, Model model) {
         List<Post> postList = postService.findPostsByCategory(categoryTitle);
-        int totalPosts = postList.size();
-        model.addAttribute("totalPosts", totalPosts);
 
         return getPostCategories(postList,model);
     }
@@ -75,7 +73,8 @@ public class APIController {
             );
             postCategoryList.add(postCategory);
         }
-
+        int totalPosts = postList.size();
+        model.addAttribute("totalPosts", totalPosts);
 
         return postCategoryList;
     }

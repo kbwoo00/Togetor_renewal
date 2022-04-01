@@ -9,12 +9,11 @@ import java.util.List;
 
 @Getter @NoArgsConstructor
 @Entity @Table(name = "USERS")
-public class User {
+public class User extends BaseTimeEntity{
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "USER_ID")
     private Long id;
-    private LocalDateTime regdate;
     private String email;
     private String pass;
     @Transient
@@ -31,8 +30,7 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Comment> comments = new ArrayList<>();
 
-    public User(LocalDateTime regdate, String email, String pass, String passConfirm, String name, String nickname, String phone, String postcode, String address, String detailAddress, String extraAddress) {
-        this.regdate = regdate;
+    public User(String email, String pass, String passConfirm, String name, String nickname, String phone, String postcode, String address, String detailAddress, String extraAddress) {
         this.email = email;
         this.pass = pass;
         this.passConfirm = passConfirm;
