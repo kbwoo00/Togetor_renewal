@@ -1,21 +1,15 @@
 package com.togetor_renewal.togetor.web.controller.post;
 
 import com.togetor_renewal.togetor.domain.entity.Category;
+import com.togetor_renewal.togetor.domain.entity.Comment;
 import com.togetor_renewal.togetor.domain.entity.District;
 import com.togetor_renewal.togetor.domain.entity.Post;
-import com.togetor_renewal.togetor.domain.entity.User;
-import com.togetor_renewal.togetor.domain.repository.CategoryRepository;
-import com.togetor_renewal.togetor.domain.repository.PostRepository;
-import com.togetor_renewal.togetor.domain.repository.UserRepository;
-import com.togetor_renewal.togetor.domain.validation.post.PostWriteForm;
+import com.togetor_renewal.togetor.domain.DTO.post.PostWriteForm;
 import com.togetor_renewal.togetor.web.Const;
+import com.togetor_renewal.togetor.web.service.post.CommentService;
 import com.togetor_renewal.togetor.web.service.post.PostService;
-import com.togetor_renewal.togetor.web.service.post.S3FileUploadService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,7 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.*;
 
 @Controller
@@ -35,23 +28,26 @@ import java.util.*;
 @RequiredArgsConstructor
 public class PostController {
     private final PostService postService;
+    private final CommentService commentService;
 
     @ModelAttribute("categoryList")
     public List<Category> categories() {
         List<Category> categoryList = postService.findAllCategory();
         return categoryList;
     }
+
     @ModelAttribute("sigunguList")
-    public List<District> siGunGus(){
-        return new ArrayList<District>();
-    }
-    @ModelAttribute("eupmyeondongList")
-    public List<District> eupMyeonDongs(){
+    public List<District> siGunGus() {
         return new ArrayList<District>();
     }
 
-    @GetMapping("/post/{categoryTitle}/{postId}")
-    public String post(@PathVariable String categoryTitle, @PathVariable String postId, Model model, HttpServletRequest request) {
+    @ModelAttribute("eupmyeondongList")
+    public List<District> eupMyeonDongs() {
+        return new ArrayList<District>();
+    }
+
+    @GetMapping("/post/{postId}")
+    public String post(@PathVariable String postId, Model model, HttpServletRequest request) {
         Optional<Post> post = postService.findPostByPostId(Long.parseLong(postId));
         // 해당 게시글 없을때 예외 페이지로 던지기
         if (post.isEmpty()) {
@@ -66,40 +62,39 @@ public class PostController {
         try {
             if (session.getAttribute(Const.SESSION_USER_ID).equals(post.get().getUser().getId())) {
                 model.addAttribute("writer", true);
-            } else{
+            } else {
                 model.addAttribute("writer", false);
             }
         } catch (NullPointerException e) {
             model.addAttribute("writer", false);
         }
 
+//        List<Comment> commentList = commentService.commentList(post.get());
+
         return "template/post/postContent";
     }
-    public void addPostsModel(Page<Post> postList, Model model){
-        model.addAttribute("postList", postList);
+    @PostMapping("/post/{postId}/comment")
+    public String commentWrite(@PathVariable String postId, Model model, @RequestParam String content){
+        Optional<Post> post = postService.findPostByPostId(Long.parseLong(postId));
+        if (post.isEmpty()){
+            return "template/post/post-error";
+        }
+        commentService.write(post.get(), post.get().getUser(), content);
 
-        int startPage = Math.max(1, postList.getPageable().getPageNumber() - 3) ;
-        int endPage = Math.min(postList.getTotalPages(), postList.getPageable().getPageNumber() + 5);
-        log.info("startPage={}", startPage);
-        log.info("endPage={}", endPage);
+        model.addAttribute("postId", postId);
 
-        model.addAttribute("startPage", startPage);
-        model.addAttribute("endPage", endPage);
+        return "template/post/comment-write-success";
     }
 
     @GetMapping("/posts/{categoryTitle}")
-    public String postList(@PathVariable String categoryTitle, Model model, @PageableDefault(size = 1) Pageable pageable) {
-        Page<Post> postList = postService.findPostByCategoryPage(categoryTitle, pageable);
-        addPostsModel(postList, model);
+    public String postList(@PathVariable String categoryTitle, Model model) {
 
         model.addAttribute("categoryTitle", categoryTitle);
         return "template/post/postList";
     }
 
     @GetMapping("/posts/{categoryTitle}/{siDo}")
-    public String postListSido(@PathVariable String categoryTitle, @PathVariable String siDo, Model model, @PageableDefault(size = 1) Pageable pageable){
-        Page<Post> postList = postService.findPostsByCategoryTitleAndSido(categoryTitle, siDo, pageable);
-        addPostsModel(postList, model);
+    public String postListSido(@PathVariable String categoryTitle, @PathVariable String siDo, Model model) {
 
         model.addAttribute("categoryTitle", categoryTitle);
 
@@ -115,10 +110,8 @@ public class PostController {
     public String postListSigungu(@PathVariable String categoryTitle,
                                   @PathVariable String siDo,
                                   @PathVariable String siGunGu,
-                                  Model model,
-                                  @PageableDefault(size = 1) Pageable pageable){
-        Page<Post> postList = postService.findPostsByCategoryTitleAndSidoAndSigungu(categoryTitle, siDo, siGunGu, pageable);
-        addPostsModel(postList, model);
+                                  Model model
+    ) {
         model.addAttribute("categoryTitle", categoryTitle);
 
         List<District> sigunguList = postService.findAllSigunguBySido(siDo);
@@ -137,10 +130,8 @@ public class PostController {
                                        @PathVariable String siDo,
                                        @PathVariable String siGunGu,
                                        @PathVariable String eupMyeonDong,
-                                       Model model,
-                                       @PageableDefault(size = 1) Pageable pageable){
-        Page<Post> postList = postService.findPostsByCategoryTitleAndSidoAndSigunguAndEupmyeondong(categoryTitle, siDo, siGunGu, eupMyeonDong, pageable);
-        addPostsModel(postList, model);
+                                       Model model
+                                       ) {
 
         model.addAttribute("categoryTitle", categoryTitle);
 
@@ -194,24 +185,23 @@ public class PostController {
 
     @PostMapping("/post/modify/{postId}")
     public String postModify(@PathVariable String postId,
-            @Validated @ModelAttribute("post") PostWriteForm form,
-                            @RequestParam MultipartFile file,
-                            BindingResult bindingResult, Model model) throws IOException {
+                             @Validated @ModelAttribute("post") PostWriteForm form,
+                             @RequestParam MultipartFile file,
+                             BindingResult bindingResult, Model model) throws IOException {
 
         if (bindingResult.hasErrors()) {
             log.info("err= {}", bindingResult);
             return "template/post/postModify";
         }
 
-
-        postService.modifyPost(form, postId, file);
+        postService.modify(form, postId, file);
 
         model.addAttribute("postId", postId);
         return "template/post/modify-success";
     }
 
     @PostMapping("/post/delete/{postId}")
-    public void postDelete(@PathVariable String postId){
+    public void postDelete(@PathVariable String postId) {
         postService.delete(Long.parseLong(postId));
     }
 

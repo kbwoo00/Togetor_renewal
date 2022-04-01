@@ -28,6 +28,8 @@ public class User {
     private String extraAddress;
     @OneToMany(mappedBy = "user")
     private List<Post> posts = new ArrayList<>();
+    @OneToMany(mappedBy = "user")
+    private List<Comment> comments = new ArrayList<>();
 
     public User(LocalDateTime regdate, String email, String pass, String passConfirm, String name, String nickname, String phone, String postcode, String address, String detailAddress, String extraAddress) {
         this.regdate = regdate;

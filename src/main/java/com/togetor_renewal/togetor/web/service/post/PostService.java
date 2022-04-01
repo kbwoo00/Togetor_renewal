@@ -8,13 +8,9 @@ import com.togetor_renewal.togetor.domain.repository.CategoryRepository;
 import com.togetor_renewal.togetor.domain.repository.DistrictRepository;
 import com.togetor_renewal.togetor.domain.repository.PostRepository;
 import com.togetor_renewal.togetor.domain.repository.UserRepository;
-import com.togetor_renewal.togetor.domain.validation.post.PostWriteForm;
+import com.togetor_renewal.togetor.domain.DTO.post.PostWriteForm;
 import com.togetor_renewal.togetor.web.Const;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -46,30 +42,28 @@ public class PostService {
 
     public void write(PostWriteForm form, Long userId, MultipartFile file) throws IOException {
 
-        LocalDateTime now = LocalDateTime.now();
         User user = userRepository.getById(userId);
         Post post = new Post(
                 form.getTitle(),
                 form.getContent(),
-                LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(),now.getHour(), now.getMinute(), now.getSecond()),
+                Const.now,
                 null,
-                user,
+                user.getNickname(),
                 fileUploadService.upload(file),
                 form.getCategoryTitle(),
                 form.getSiDo(),
                 form.getSiGunGu(),
-                form.getEupMyeonDong()
+                form.getEupMyeonDong(),
+                user
         );
 
         postRepository.save(post);
 
     }
 
-    public void modifyPost(PostWriteForm form, String postId, MultipartFile file) throws IOException {
+    public void modify(PostWriteForm form, String postId, MultipartFile file) throws IOException {
         LocalDateTime now = LocalDateTime.now();
-        LocalDateTime chgdate = LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), now.getHour(), now.getMinute(), now.getSecond());
-
-
+        LocalDateTime chgdate = LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), now.getHour(), now.getMinute());
         postRepository.updatePost(
                 form.getTitle(),
                 form.getContent(),
@@ -86,22 +80,6 @@ public class PostService {
     public void delete(Long postId) {
         postRepository.deleteById(postId);
     }
-    public Page<Post> findPostByCategoryPage(String categoryTitle, Pageable pageable){
-        return postRepository.findAllByCategoryTitleOrderByIdDesc(categoryTitle, pageable);
-    }
-
-    public Page<Post> findPostsByCategoryTitleAndSido(String categoryTitle, String siDo, Pageable pageable) {
-        return postRepository.findAllByCategoryTitleAndSiDoOrderByIdDesc(categoryTitle, siDo, pageable);
-    }
-
-
-    public Page<Post> findPostsByCategoryTitleAndSidoAndSigungu(String categoryTitle, String siDo, String siGunGu, Pageable pageable) {
-        return postRepository.findAllByCategoryTitleAndSiDoAndSiGunGuOrderByIdDesc(categoryTitle, siDo, siGunGu, pageable);
-    }
-
-    public Page<Post> findPostsByCategoryTitleAndSidoAndSigunguAndEupmyeondong(String categoryTitle, String siDo, String siGunGu, String eupMyeonDong, Pageable pageable) {
-        return postRepository.findAllByCategoryTitleAndSiDoAndSiGunGuAndEupMyeonDongOrderByIdDesc(categoryTitle, siDo, siGunGu, eupMyeonDong, pageable);
-    }
 
     public List<District> findAllSigunguBySido(String siDo) {
         return districtRepository.findAllBySiDoAndSiGunGuIsNotNullAndEupMyeonDongIsNull(siDo);
@@ -110,4 +88,20 @@ public class PostService {
     public List<District> findAllEupmyeondongBySidoAndSigungu(String siDo, String siGunGu){
         return districtRepository.findAllBySiDoAndSiGunGuAndEupMyeonDongIsNotNull(siDo, siGunGu);
     }
+
+    public List<Post> findPostsByCategory(String categoryTitle){
+        return postRepository.findPostsByCategoryTitleOrderByIdDesc(categoryTitle);
+    }
+
+    public List<Post> findPostsByCategoryAndSido(String categoryTitle, String siDo){
+        return postRepository.findPostsByCategoryTitleAndSiDoOrderByIdDesc(categoryTitle, siDo);
+    }
+    public List<Post> findPostsByCategoryAndSidoAndSigunGu(String categoryTitle, String siDo, String siGunGu){
+        return postRepository.findPostsByCategoryTitleAndSiDoAndSiGunGuOrderByIdDesc(categoryTitle, siDo, siGunGu);
+    }
+    public List<Post> findPostsByCategoryAndSidoAndSigunGuAndEupmyeondong(String categoryTitle, String siDo, String siGunGu, String eupMyeonDong){
+        return postRepository.findPostsByCategoryTitleAndSiDoAndSiGunGuAndEupMyeonDongOrderByIdDesc(categoryTitle, siDo, siGunGu, eupMyeonDong);
+    }
+
+
 }

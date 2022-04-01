@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Togetor 게시물들</title>
     <style>
-        .post-info{
+        .post-info {
             font-size: small;
         }
 
@@ -27,90 +27,111 @@
             </li>
         </ul>
         <div th:replace="~{template/fragments/select_region :: select}"></div>
-        <h3 class="text-center" th:if="${siDo != null && siGunGu != null && eupMyeonDong != null}" th:text="|현재 선택된 지역은 ${siDo} ${siGunGu} ${eupMyeonDong} 입니다.|">현재 선택된 지역은 XX입니다.</h3>
-        <h3 class="text-center" th:if="${siDo != null && siGunGu != null && eupMyeonDong == null}" th:text="|현재 선택된 지역은 ${siDo} ${siGunGu} 입니다.|">현재 선택된 지역은 XX입니다.</h3>
-        <h3 class="text-center" th:if="${siDo != null && siGunGu == null && eupMyeonDong == null}" th:text="|현재 선택된 지역은 ${siDo} 입니다.|">현재 선택된 지역은 XX입니다.</h3>
+        <h3 class="text-center" th:if="${siDo != null && siGunGu != null && eupMyeonDong != null}"
+            th:text="|현재 선택된 지역은 ${siDo} ${siGunGu} ${eupMyeonDong} 입니다.|">현재 선택된 지역은 XX입니다.</h3>
+        <h3 class="text-center" th:if="${siDo != null && siGunGu != null && eupMyeonDong == null}"
+            th:text="|현재 선택된 지역은 ${siDo} ${siGunGu} 입니다.|">현재 선택된 지역은 XX입니다.</h3>
+        <h3 class="text-center" th:if="${siDo != null && siGunGu == null && eupMyeonDong == null}"
+            th:text="|현재 선택된 지역은 ${siDo} 입니다.|">현재 선택된 지역은 XX입니다.</h3>
 
-        <div class="row mb-2 mt-4 me-0 p-0 g-0">
-            <div th:if="${postList.getTotalElements()} == 0">
-                <h2 class="text-center text-info mt-5">해당 컨텐츠가 없습니다.</h2>
-            </div>
-            <div th:each="post : ${postList}" class="col-md-6 h-25">
-                <div class="row g-0 border rounded mb-4 shadow-sm post">
-                    <div class="col p-4 d-flex flex-column">
-                        <a class="text-decoration-none" th:href="@{/post/{param1}/{param2}(param1=${post.categoryTitle}, param2=${post.id})}">
-                            <div class="row justify-content-between">
-                                <h3 th:text="${post.title}" class="mb-1 fs-3 fw-bold col-md-auto text-truncate">제목</h3>
-                            </div>
-                        </a>
-                        <p th:text="${post.siDo} + ' ' + ${post.siGunGu} + ' ' + ${post.eupMyeonDong}" class="mb-3 text-secondary">위치</p>
-                        <div class="mb-4 text-truncate col-md-auto content" th:text="${post.content}">내용 블라블라</div>
-                        <div class="row post-info">
-                            <div th:text="${post.user.nickname}" class="mb-1 col-md">작성자(연관관계 매핑필요)</div>
-                        </div>
-                        <div class="row post-info">
-                            <div class="mb-1 col-md-3 text-muted">댓글 수</div>
-                            <div class="mb-1 text-muted col-md-3 text-start">관심</div>
-                            <div th:text="${post.regdate}" class="mb-1 text-muted col-md-6 text-end">작성 시간</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div id="content" class="row mb-2 mt-4 me-0 p-0 g-0">
         </div>
     </div>
 
-    <nav class="mt-5">
-        <ul th:if="${endPage != 0}" class="pagination justify-content-center">
-            <li class="page-item" th:classappend="${1 == postList.pageable.pageNumber + 1} ? 'disabled' : _">
-                <a class="page-link" th:href="@{/posts/{param1}?page={param2}(param1=${categoryTitle}, param2=${startPage - 1})}">Previous</a>
-            </li>
-            <li th:each="page : ${#numbers.sequence(startPage, endPage)}" th:classappend="${page == postList.pageable.pageNumber + 1} ? 'disabled' : _" class="page-item">
-                <a class="page-link" href="#"
-                   th:href="@{/posts/{param1}?page={param2}(param1=${categoryTitle}, param2=${page - 1})}" th:text="${page}">1</a>
-            </li>
-            <li class="page-item" th:classappend="${postList.totalPages == postList.pageable.pageNumber + 1} ? 'disabled' : _">
-                <a th:href="@{/posts/{param1}?page={param2}(param1=${categoryTitle}, param2=${endPage - 1})}" class="page-link" href="#">Next</a>
-            </li>
-        </ul>
-    </nav>
 </main>
 <div class="container mt-5">
     <footer th:replace="~{template/fragments/footer :: footer}"></footer>
 </div>
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script th:inline="javascript">
+    const categoryTitle = [[${categoryTitle}]];
+    const siDo = [[${siDo}]];
+    const siGunGu = [[${siGunGu}]];
+    const eupMyeonDong = [[${eupMyeonDong}]];
 
-    $(document).ready(function (){
-        const categoryTitle = [[${categoryTitle}]];
-        const siDo = [[${siDo}]];
-        const siGunGu = [[${siGunGu}]];
-        const eupMyeonDong = [[${eupMyeonDong}]];
+    const pageSize = 6;
+    let start = 0;
+    let last = start + pageSize;
+
+    $(document).ready(function () {
+        postCategories();
+
+        $(window).scroll(function (){
+            if ($(window).scrollTop() >= $(document).height() - $(window).height()){
+                start += pageSize;
+                last += pageSize;
+                postCategories();
+            }
+        })
+
         $("#siDoSel").val(siDo).prop("selected", true);
         $("#siGunGuSel").val(siGunGu).prop("selected", true);
         $("#eupMyeonDongSel").val(eupMyeonDong).prop("selected", true);
 
 
-        $("#siDoSel").change(function (){
+        $("#siDoSel").change(function () {
             const selectedSido = $("#siDoSel option:selected").val();
 
             window.location.href = '/posts/' + categoryTitle + '/' + selectedSido;
         });
 
-        $("#siGunGuSel").change(function (){
+        $("#siGunGuSel").change(function () {
             const selectedSigungu = $("#siGunGuSel option:selected").val();
 
             window.location.href = '/posts/' + categoryTitle + '/' + siDo + '/' + selectedSigungu;
         });
 
-        $("#eupMyeonDongSel").change(function (){
+        $("#eupMyeonDongSel").change(function () {
             const selectedEupmyeondong = $("#eupMyeonDongSel option:selected").val();
 
             window.location.href = '/posts/' + categoryTitle + '/' + siDo + '/' + siGunGu + '/' + selectedEupmyeondong;
         });
 
 
-
     });
+
+    const postCategories = function () {
+        $.ajax({
+            url: "http://localhost:8088/api/posts/" + categoryTitle,
+            type: "post",
+            dataType: "json",
+            contentType: "application/json;  charset=UTF-8",
+            success: function (posts) {
+                if (posts.length == 0) {
+                    $("#content").append("<div>\n" +
+                        "                <h2 class=\"text-center text-info mt-5\">해당 컨텐츠가 없습니다.</h2>\n" +
+                        "            </div>");
+                } else {
+                    for (let i = start; i < last; i++) {
+                        if (i == posts.length+1) return;
+                        $("#content").append("            <div class=\"col-md-6 h-25\">\n" +
+                            "                <div class=\"row g-0 border rounded mb-4 shadow-sm post\">\n" +
+                            "                    <div class=\"col p-4 d-flex flex-column\">\n" +
+                            "                        <a href='/post/" + posts[i].id + '\'' + "class=\"text-decoration-none\">\n" +
+                            "                            <div class=\"row justify-content-between\">\n" +
+                            "                                <h3 class=\"mb-1 fs-3 fw-bold col-md-auto text-truncate\">" + posts[i].title + "</h3>\n" +
+                            "                            </div>\n" +
+                            "                        </a>\n" +
+                            "                        <p class=\"mb-3 text-secondary\">" + posts[i].siDo + ' ' + posts[i].siGunGu + ' ' + posts[i].eupMyeonDong + "</p>\n" +
+                            "                        <div class=\"mb-4 text-truncate col-md-auto content\">" + posts[i].content + "</div>\n" +
+                            "                        <div class=\"row post-info\">\n" +
+                            "                            <div class=\"mb-1 col-md\">" + posts[i].nickname + "</div>\n" +
+                            "                        </div>\n" +
+                            "                        <div class=\"row post-info\">\n" +
+                            "                            <div class=\"mb-1 col-md-3 text-muted\">댓글 수</div>\n" +
+                            "                            <div class=\"mb-1 text-muted col-md-3 text-start\">관심</div>\n" +
+                            "                            <div class=\"mb-1 text-muted col-md-6 text-end\">" + posts[i].regdate + "</div>\n" +
+                            "                        </div>\n" +
+                            "                    </div>\n" +
+                            "                </div>\n" +
+                            "            </div>\n");
+                    }
+                }
+            }
+        });
+    }
+
+
 </script>
 <script th:src="@{/js/bootstrap.bundle.min.js}" src="/templates/js/bootstrap.bundle.min.js"/>
 

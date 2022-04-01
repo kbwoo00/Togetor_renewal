@@ -1,11 +1,11 @@
 package com.togetor_renewal.togetor.web.controller.user;
 
 import com.togetor_renewal.togetor.domain.entity.User;
-import com.togetor_renewal.togetor.domain.validation.user.UserModifyForm;
+import com.togetor_renewal.togetor.domain.DTO.user.UserModifyForm;
 import com.togetor_renewal.togetor.web.Const;
 import com.togetor_renewal.togetor.web.service.user.UserService;
-import com.togetor_renewal.togetor.domain.validation.user.UserJoinForm;
-import com.togetor_renewal.togetor.domain.validation.user.UserLoginForm;
+import com.togetor_renewal.togetor.domain.DTO.user.UserJoinForm;
+import com.togetor_renewal.togetor.domain.DTO.user.UserLoginForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
