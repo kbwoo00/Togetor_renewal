@@ -13,8 +13,8 @@ import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
 
-    Optional<Post> findById(Long postId);
 
+    Optional<Post> findById(Long postId);
     List<Post> findFirst5ByCategoryTitleOrderByIdDesc(String categoryTitle);
     List<Post> findPostsByCategoryTitleOrderByIdDesc(String categoryTitle);
     List<Post> findPostsByCategoryTitleAndSiDoOrderByIdDesc(String categoryTitle, String siDo);

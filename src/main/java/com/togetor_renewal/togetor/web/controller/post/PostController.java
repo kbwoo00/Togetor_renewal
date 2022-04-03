@@ -84,20 +84,41 @@ public class PostController {
 
         model.addAttribute("postId", postId);
 
-        return "template/post/comment-write-success";
+        return "template/post/comment-write";
     }
     @PostMapping("/post/{postId}/recomment")
-    public String recommentWrite(@PathVariable String postId, Model model, @RequestParam String content){
+    public String recommentWrite(@PathVariable String postId, Model model,
+                                 @RequestParam("content") String content,
+                                 @RequestParam("commSeq") int commSeq){
         Optional<Post> post = postService.findPostByPostId(Long.parseLong(postId));
         if (post.isEmpty()){
             return "template/post/post-error";
         }
-        commentService.recommentWrite(post.get(), post.get().getUser(), content);
+        commentService.recommentWrite(post.get(), post.get().getUser(), content, commSeq);
 
         model.addAttribute("postId", postId);
 
-        return "template/post/comment-write-success";
+        return "template/post/comment-write";
     }
+    @PostMapping("/post/{postId}/comment/delete/{commSeq}/{recommSeq}")
+    public void commentDelete(
+            @PathVariable String postId,
+            @PathVariable String commSeq,
+            @PathVariable String recommSeq){
+        commentService.delete(Long.parseLong(postId), Integer.parseInt(commSeq), Integer.parseInt(recommSeq));
+    }
+    @PostMapping("/post/{postId}/comment/modify/{commSeq}/{recommSeq}")
+    public String commentModify(
+            @PathVariable String postId,
+            @PathVariable String commSeq,
+            @PathVariable String recommSeq,
+            @RequestParam String content,
+            Model model){
+        commentService.modify(Long.parseLong(postId), Integer.parseInt(commSeq), Integer.parseInt(recommSeq), content);
+        model.addAttribute("postId", postId);
+        return "template/post/comment-write";
+    }
+
     @GetMapping("/posts/{categoryTitle}")
     public String postList(@PathVariable String categoryTitle, Model model) {
 
