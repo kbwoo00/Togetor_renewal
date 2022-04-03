@@ -1,4 +1,4 @@
-package com.togetor_renewal.togetor.domain.DTO.post;
+package com.togetor_renewal.togetor.domain.DTO;
 
 import com.togetor_renewal.togetor.domain.entity.User;
 import lombok.Data;

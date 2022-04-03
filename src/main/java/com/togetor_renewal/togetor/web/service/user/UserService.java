@@ -2,12 +2,11 @@ package com.togetor_renewal.togetor.web.service.user;
 
 import com.togetor_renewal.togetor.domain.entity.User;
 import com.togetor_renewal.togetor.domain.repository.UserRepository;
-import com.togetor_renewal.togetor.domain.DTO.user.UserJoinForm;
-import com.togetor_renewal.togetor.domain.DTO.user.UserModifyForm;
+import com.togetor_renewal.togetor.domain.DTO.UserJoinForm;
+import com.togetor_renewal.togetor.domain.DTO.UserModifyForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 

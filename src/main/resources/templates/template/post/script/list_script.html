@@ -1,49 +1,11 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Togetor 게시물들</title>
-    <style>
-        .post-info {
-            font-size: small;
-        }
-
-    </style>
-    <link th:href="@{/css/bootstrap.min.css}" href="/templates/css/bootstrap.min.css" rel="stylesheet"/>
+    <meta charset="UTF-8">
+    <title>Title</title>
 </head>
 <body>
-<div class="container">
-    <header th:replace="~{template/fragments/header :: header}"></header>
-</div>
-<main>
-    <div class="container">
-        <ul class="nav nav-tabs mb-3 justify-content-center">
-            <li th:each="category : ${categoryList}" class="nav-item me-2">
-                <!-- class=active이면 회색으로 변함. -->
-                <a th:classappend="${category.title == categoryTitle ? 'active' : ''}"
-                   class="nav-link fw-bold fs-5" th:href="@{/posts/{param}(param=${category.title})}"
-                   href="#" th:text="${category.title}">운동</a>
-            </li>
-        </ul>
-        <div th:replace="~{template/fragments/select_region :: select}"></div>
-        <h3 class="text-center" th:if="${siDo != null && siGunGu != null && eupMyeonDong != null}"
-            th:text="|현재 선택된 지역은 ${siDo} ${siGunGu} ${eupMyeonDong} 입니다.|">현재 선택된 지역은 XX입니다.</h3>
-        <h3 class="text-center" th:if="${siDo != null && siGunGu != null && eupMyeonDong == null}"
-            th:text="|현재 선택된 지역은 ${siDo} ${siGunGu} 입니다.|">현재 선택된 지역은 XX입니다.</h3>
-        <h3 class="text-center" th:if="${siDo != null && siGunGu == null && eupMyeonDong == null}"
-            th:text="|현재 선택된 지역은 ${siDo} 입니다.|">현재 선택된 지역은 XX입니다.</h3>
-
-        <div id="content" class="row mb-2 mt-4 me-0 p-0 g-0">
-        </div>
-    </div>
-
-</main>
-<div class="container mt-5">
-    <footer th:replace="~{template/fragments/footer :: footer}"></footer>
-</div>
-<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-<script th:inline="javascript">
+<script th:fragment="postList" th:inline="javascript">
     const categoryTitle = [[${categoryTitle}]];
     const siDo = [[${siDo}]];
     const siGunGu = [[${siGunGu}]];
@@ -53,12 +15,11 @@
     let start = 0;
     let last = start + pageSize;
 
-
     $(document).ready(function () {
         postCategories();
 
-        $(window).scroll(function (){
-            if ($(window).scrollTop() >= $(document).height() - $(window).height()){
+        $(window).scroll(function () {
+            if ($(window).scrollTop() >= $(document).height() - $(window).height()) {
                 start += pageSize;
                 last += pageSize;
                 postCategories();
@@ -105,7 +66,7 @@
                         "            </div>");
                 } else {
                     for (let i = start; i < last; i++) {
-                        if (i == posts.length+1) return;
+                        if (i == posts.length + 1) return;
                         $("#content").append("            <div class=\"col-md-6 h-25\">\n" +
                             "                <div class=\"row g-0 border rounded mb-4 shadow-sm post\">\n" +
                             "                    <div class=\"col p-4 d-flex flex-column\">\n" +
@@ -120,8 +81,7 @@
                             "                            <div class=\"mb-1 col-md\">" + posts[i].nickname + "</div>\n" +
                             "                        </div>\n" +
                             "                        <div class=\"row post-info\">\n" +
-                            "                            <div class=\"mb-1 col-md-3 text-muted\">댓글 수</div>\n" +
-                            "                            <div class=\"mb-1 text-muted col-md-3 text-start\">관심</div>\n" +
+                            "                            <div class=\"mb-1 col-md-3 text-muted\">조회수</div>\n" +
                             "                            <div class=\"mb-1 text-muted col-md-6 text-end\">" + posts[i].regdate + "</div>\n" +
                             "                        </div>\n" +
                             "                    </div>\n" +
@@ -132,11 +92,6 @@
             }
         });
     }
-
-
 </script>
-<script th:src="@{/js/bootstrap.bundle.min.js}" src="/templates/js/bootstrap.bundle.min.js"/>
-
 </body>
 </html>
-

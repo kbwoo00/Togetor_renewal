@@ -6,8 +6,11 @@
 </head>
 <body>
 
-<script th:inline="javascript">
-
-</script>
 </body>
+<script th:inline="javascript">
+    alert('글이 성공적으로 등록되었습니다.');
+    const categoryTitle = [[${post.categoryTitle}]];
+
+    window.location.href = '/posts/' + categoryTitle;
+</script>
 </html>

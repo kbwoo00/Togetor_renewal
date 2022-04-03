@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script th:fragment="modify">
+    $(document).ready(function () {
+        /** 지역 선택 */
+        $('#siDo').change(function () {
+            const selectedSiDo = $("#siDo option:selected").val();
+            if (selectedSiDo == '') {
+                $("#siGunGu").find("option").remove();
+                $("#siGunGu").append('<option value="">동네를 선택하세요</option>');
+                $('#siGunGu').prop('disabled', true);
+
+                $("#eupMyeonDong").find("option").remove();
+                $("#eupMyeonDong").append('<option value="">동을 선택하세요</option>');
+                $('#eupMyeonDong').prop('disabled', true);
+            } else {
+                $.ajax({
+                    url: "http://localhost:8088/api/district",
+                    type: "post",
+                    dataType: "json",
+                    success: function (districts) {
+                        $("#siGunGu").find("option").remove();
+                        $("#siGunGu").append('<option value="">동네를 선택하세요</option>');
+                        if (!$('#eupMyeonDong').prop('disabled')) {
+                            $('#eupMyeonDong').prop('disabled', true);
+                        }
+                        $.each(districts, function (index, district) {
+                            if (selectedSiDo == district.siDo && district.eupMyeonDong == null && district.siGunGu != null) {
+                                $('#siGunGu').append('<option value="' + district.siGunGu + '">' + district.siGunGu + '</option>');
+                            }
+                        });
+
+                        $('#siGunGu').prop('disabled', false);
+                    }
+                });
+            }
+
+        });
+
+        $('#siGunGu').change(function () {
+            const selectedSiGunGu = $("#siGunGu option:selected").val();
+            if (selectedSiGunGu == '') {
+                // 동네를 선택하세요를 선택했을때에는 동을 바꾸지 못하게 한다.
+                $("#eupMyeonDong").find("option").remove();
+                $("#eupMyeonDong").append('<option value="">동을 선택하세요</option>');
+                $('#eupMyeonDong').prop('disabled', true);
+            } else {
+                $.ajax({
+                    url: "http://localhost:8088/api/district",
+                    type: "post",
+                    dataType: "json",
+                    success: function (districts) {
+                        $("#eupMyeonDong").find("option").remove();
+                        $("#eupMyeonDong").append('<option value="">동을 선택하세요</option>');
+                        $.each(districts, function (index, district) {
+                            if (selectedSiGunGu == district.siGunGu && district.eupMyeonDong != null) {
+                                $('#eupMyeonDong').append('<option value="' + district.eupMyeonDong + '">' + district.eupMyeonDong + '</option>');
+                            }
+                        });
+                        $('#eupMyeonDong').prop('disabled', false);
+                    }
+                });
+            }
+        });
+        /** 지역 선택 */
+    });
+</script>
+</body>
+</html>

@@ -13,10 +13,10 @@ import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
 
-
     Optional<Post> findById(Long postId);
     List<Post> findFirst5ByCategoryTitleOrderByIdDesc(String categoryTitle);
-    List<Post> findPostsByCategoryTitleOrderByIdDesc(String categoryTitle);
+    @Query("select p,c from Post p left join p.comments c where p.categoryTitle= :categoryTitle")
+    List<Post> findPostsByCategoryTitleOrderByIdDesc(@Param("categoryTitle") String categoryTitle);
     List<Post> findPostsByCategoryTitleAndSiDoOrderByIdDesc(String categoryTitle, String siDo);
     List<Post> findPostsByCategoryTitleAndSiDoAndSiGunGuOrderByIdDesc(String categoryTitle, String siDo, String siGunGu);
     List<Post> findPostsByCategoryTitleAndSiDoAndSiGunGuAndEupMyeonDongOrderByIdDesc(String categoryTitle, String siDo, String siGunGu, String eupMyeonDong);

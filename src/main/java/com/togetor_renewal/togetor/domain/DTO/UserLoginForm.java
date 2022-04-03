@@ -1,4 +1,4 @@
-package com.togetor_renewal.togetor.domain.DTO.user;
+package com.togetor_renewal.togetor.domain.DTO;
 
 
 import lombok.Getter;

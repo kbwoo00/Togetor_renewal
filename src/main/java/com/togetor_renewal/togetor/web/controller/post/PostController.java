@@ -1,13 +1,14 @@
 package com.togetor_renewal.togetor.web.controller.post;
 
-import com.togetor_renewal.togetor.domain.DTO.post.CommentDTO;
-import com.togetor_renewal.togetor.domain.entity.Category;
-import com.togetor_renewal.togetor.domain.entity.District;
+import com.togetor_renewal.togetor.domain.DTO.CommentDTO;
 import com.togetor_renewal.togetor.domain.entity.Post;
-import com.togetor_renewal.togetor.domain.DTO.post.PostWriteForm;
+import com.togetor_renewal.togetor.domain.DTO.PostWriteForm;
+import com.togetor_renewal.togetor.domain.entity.User;
 import com.togetor_renewal.togetor.web.Const;
-import com.togetor_renewal.togetor.web.service.post.CommentService;
+import com.togetor_renewal.togetor.web.service.comment.CommentService;
+import com.togetor_renewal.togetor.web.service.post.ClassifyService;
 import com.togetor_renewal.togetor.web.service.post.PostService;
+import com.togetor_renewal.togetor.web.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -23,39 +24,23 @@ import java.io.IOException;
 import java.util.*;
 
 @Controller
-@RequestMapping
 @Slf4j
 @RequiredArgsConstructor
+@RequestMapping("/post")
 public class PostController {
     private final PostService postService;
+    private final UserService userService;
+    private final ClassifyService classifyService;
     private final CommentService commentService;
 
-    @ModelAttribute("categoryList")
-    public List<Category> categories() {
-        List<Category> categoryList = postService.findAllCategory();
-        return categoryList;
-    }
-
-    @ModelAttribute("sigunguList")
-    public List<District> siGunGus() {
-        return new ArrayList<District>();
-    }
-
-    @ModelAttribute("eupmyeondongList")
-    public List<District> eupMyeonDongs() {
-        return new ArrayList<District>();
-    }
-
-    @GetMapping("/post/{postId}")
+    @GetMapping("/{postId}")
     public String post(@PathVariable String postId, Model model, HttpServletRequest request) {
         Optional<Post> post = postService.findPostByPostId(Long.parseLong(postId));
         // 해당 게시글 없을때 예외 페이지로 던지기
         if (post.isEmpty()) {
-            return "template/post/post-error";
+            return "template/post/error/post_error";
         }
-
         model.addAttribute("post", post.get());
-
         HttpSession session = request.getSession(false);
 
         // 글 수정 권한 있는지
@@ -72,129 +57,27 @@ public class PostController {
         List<CommentDTO> commentList = commentService.commentList(post.get().getId());
         model.addAttribute("commentList", commentList);
 
-        return "template/post/postContent";
-    }
-    @PostMapping("/post/{postId}/comment")
-    public String commentWrite(@PathVariable String postId, Model model, @RequestParam String content){
-        Optional<Post> post = postService.findPostByPostId(Long.parseLong(postId));
-        if (post.isEmpty()){
-            return "template/post/post-error";
-        }
-        commentService.commentWrite(post.get(), post.get().getUser(), content);
-
-        model.addAttribute("postId", postId);
-
-        return "template/post/comment-write";
-    }
-    @PostMapping("/post/{postId}/recomment")
-    public String recommentWrite(@PathVariable String postId, Model model,
-                                 @RequestParam("content") String content,
-                                 @RequestParam("commSeq") int commSeq){
-        Optional<Post> post = postService.findPostByPostId(Long.parseLong(postId));
-        if (post.isEmpty()){
-            return "template/post/post-error";
-        }
-        commentService.recommentWrite(post.get(), post.get().getUser(), content, commSeq);
-
-        model.addAttribute("postId", postId);
-
-        return "template/post/comment-write";
-    }
-    @PostMapping("/post/{postId}/comment/delete/{commSeq}/{recommSeq}")
-    public void commentDelete(
-            @PathVariable String postId,
-            @PathVariable String commSeq,
-            @PathVariable String recommSeq){
-        commentService.delete(Long.parseLong(postId), Integer.parseInt(commSeq), Integer.parseInt(recommSeq));
-    }
-    @PostMapping("/post/{postId}/comment/modify/{commSeq}/{recommSeq}")
-    public String commentModify(
-            @PathVariable String postId,
-            @PathVariable String commSeq,
-            @PathVariable String recommSeq,
-            @RequestParam String content,
-            Model model){
-        commentService.modify(Long.parseLong(postId), Integer.parseInt(commSeq), Integer.parseInt(recommSeq), content);
-        model.addAttribute("postId", postId);
-        return "template/post/comment-write";
+        return "template/post/post_content";
     }
 
-    @GetMapping("/posts/{categoryTitle}")
-    public String postList(@PathVariable String categoryTitle, Model model) {
-
-        model.addAttribute("categoryTitle", categoryTitle);
-        return "template/post/postList";
-    }
-
-    @GetMapping("/posts/{categoryTitle}/{siDo}")
-    public String postListSido(@PathVariable String categoryTitle, @PathVariable String siDo, Model model) {
-
-        model.addAttribute("categoryTitle", categoryTitle);
-
-        List<District> sigunguList = postService.findAllSigunguBySido(siDo);
-        model.addAttribute("sigunguList", sigunguList);
-
-        model.addAttribute("sido", siDo);
-
-        return "template/post/postList";
-    }
-
-    @GetMapping("/posts/{categoryTitle}/{siDo}/{siGunGu}")
-    public String postListSigungu(@PathVariable String categoryTitle,
-                                  @PathVariable String siDo,
-                                  @PathVariable String siGunGu,
-                                  Model model
-    ) {
-        model.addAttribute("categoryTitle", categoryTitle);
-
-        List<District> sigunguList = postService.findAllSigunguBySido(siDo);
-        model.addAttribute("sigunguList", sigunguList);
-        List<District> eupmyeondongList = postService.findAllEupmyeondongBySidoAndSigungu(siDo, siGunGu);
-        model.addAttribute("eupmyeondongList", eupmyeondongList);
-
-        model.addAttribute("sido", siDo);
-        model.addAttribute("sigungu", siGunGu);
-
-        return "template/post/postList";
-    }
-
-    @GetMapping("/posts/{categoryTitle}/{siDo}/{siGunGu}/{eupMyeonDong}")
-    public String postListEupmyeondong(@PathVariable String categoryTitle,
-                                       @PathVariable String siDo,
-                                       @PathVariable String siGunGu,
-                                       @PathVariable String eupMyeonDong,
-                                       Model model
-                                       ) {
-
-        model.addAttribute("categoryTitle", categoryTitle);
-
-        List<District> sigunguList = postService.findAllSigunguBySido(siDo);
-        model.addAttribute("sigunguList", sigunguList);
-        List<District> eupmyeondongList = postService.findAllEupmyeondongBySidoAndSigungu(siDo, siGunGu);
-        model.addAttribute("eupmyeondongList", eupmyeondongList);
-
-        model.addAttribute("sido", siDo);
-        model.addAttribute("sigungu", siGunGu);
-        model.addAttribute("eupmyeondong", eupMyeonDong);
-
-        return "template/post/postList";
-    }
-
-    @GetMapping("/post/write")
+    /** 게시글 Create, Update, Delete */
+    @GetMapping("/write")
     public String postWriteForm(Model model) {
         model.addAttribute("post", new Post());
-        return "template/post/postWrite";
+        model.addAttribute("categoryList", classifyService.findAllCategory());
+        return "template/post/post_write";
     }
 
-    @PostMapping("/post/write")
+    @PostMapping("/write")
     public String postWrite(@Validated @ModelAttribute("post") PostWriteForm form,
                             HttpServletRequest request,
                             @RequestParam MultipartFile file,
-                            BindingResult bindingResult, Model model) throws IOException {
+                            BindingResult bindingResult,
+                            Model model) throws IOException {
         //필드 검증
         if (bindingResult.hasErrors()) {
             log.info("err= {}", bindingResult);
-            return "template/post/postWrite";
+            return "template/post/post_write";
         }
 
         // 글쓰기
@@ -202,40 +85,152 @@ public class PostController {
         Long userId = (Long) session.getAttribute(Const.SESSION_USER_ID);
 
         postService.write(form, userId, file);
+        model.addAttribute("categoryTitle", form.getCategoryTitle());
 
-        return "template/post/write-success";
+        return "template/post/notice/write_success";
     }
-
-    @GetMapping("/post/modify/{postId}")
-    public String postModifyForm(@PathVariable String postId, Model model) {
-
+    @GetMapping("/modify/{postId}")
+    public String postModifyForm(@PathVariable String postId, Model model, HttpServletRequest request) {
         Optional<Post> post = postService.findPostByPostId(Long.parseLong(postId));
 
+        // 권한 체크
+        HttpSession session = request.getSession(false);
+        if (session.getAttribute(Const.SESSION_USER_ID) != post.get().getUser().getId()){
+            return "template/post/error/authority_reject";
+        }
         model.addAttribute("post", post.get());
+        model.addAttribute("categoryList", classifyService.findAllCategory());
 
-        return "template/post/postModify";
+        return "template/post/post_modify";
     }
 
-    @PostMapping("/post/modify/{postId}")
+    @PostMapping("/modify/{postId}")
     public String postModify(@PathVariable String postId,
                              @Validated @ModelAttribute("post") PostWriteForm form,
                              @RequestParam MultipartFile file,
-                             BindingResult bindingResult, Model model) throws IOException {
+                             BindingResult bindingResult, Model model,
+                             HttpServletRequest request) throws IOException {
 
         if (bindingResult.hasErrors()) {
             log.info("err= {}", bindingResult);
-            return "template/post/postModify";
+            return "template/post/post_modify";
+        }
+
+        Optional<Post> post = postService.findPostByPostId(Long.parseLong(postId));
+
+        HttpSession session = request.getSession(false);
+        if (session.getAttribute(Const.SESSION_USER_ID) != post.get().getUser().getId()){
+            return "template/post/error/authority_reject";
         }
 
         postService.modify(form, postId, file);
 
         model.addAttribute("postId", postId);
-        return "template/post/modify-success";
+        return "template/post/notice/modify_success";
     }
 
-    @PostMapping("/post/delete/{postId}")
-    public void postDelete(@PathVariable String postId) {
+    @PostMapping("/delete/{postId}")
+    public void postDelete(@PathVariable String postId, HttpServletRequest request) {
+        Optional<Post> post = postService.findPostByPostId(Long.parseLong(postId));
+
+        HttpSession session = request.getSession(false);
+        if (session.getAttribute(Const.SESSION_USER_ID) != post.get().getUser().getId()){
+            return;
+        }
         postService.delete(Long.parseLong(postId));
     }
+    /** 게시글 Create, Update, Delete */
+
+    /** 댓글 Create, Update, Delete */
+    @PostMapping("/{postId}/comment")
+    public String commentWrite(@PathVariable String postId, Model model, @RequestParam String content, HttpServletRequest request){
+        Optional<Post> post = postService.findPostByPostId(Long.parseLong(postId));
+        if (post.isEmpty()){
+            return "template/post/error/post_error";
+        }
+
+        HttpSession session = request.getSession(false);
+        if (session.getAttribute(Const.SESSION_USER_ID) == null){
+            return "template/post/error/authority_reject";
+        }
+        Long userId = (Long) session.getAttribute(Const.SESSION_USER_ID);
+        User user = userService.findUserById(userId);
+        if (user == null){
+            return "template/post/error/authority_reject";
+        }
+
+        commentService.commentWrite(post.get(), user, content);
+
+        model.addAttribute("postId", postId);
+
+        return "template/post/notice/comment_write";
+    }
+    @PostMapping("/{postId}/recomment")
+    public String recommentWrite(@PathVariable String postId, Model model,
+                                 @RequestParam("content") String content,
+                                 @RequestParam("commSeq") int commSeq,
+                                 HttpServletRequest request){
+        Optional<Post> post = postService.findPostByPostId(Long.parseLong(postId));
+        if (post.isEmpty()){
+            return "template/post/error/post_error";
+        }
+
+        HttpSession session = request.getSession(false);
+        if (session.getAttribute(Const.SESSION_USER_ID) == null){
+            return "template/post/error/authority_reject";
+        }
+        Long userId = (Long) session.getAttribute(Const.SESSION_USER_ID);
+        User user = userService.findUserById(userId);
+        if (user == null){
+            return "template/post/error/authority_reject";
+        }
+
+        commentService.recommentWrite(post.get(), user, content, commSeq);
+
+        model.addAttribute("postId", postId);
+
+        return "template/post/notice/comment_write";
+    }
+    @PostMapping("/{postId}/comment/delete/{commSeq}/{recommSeq}")
+    public void commentDelete(
+            @PathVariable String postId,
+            @PathVariable String commSeq,
+            @PathVariable String recommSeq,
+            HttpServletRequest request){
+
+        HttpSession session = request.getSession(false);
+        if (session.getAttribute(Const.SESSION_USER_ID) == null){
+            return;
+        }
+        Long userId = (Long) session.getAttribute(Const.SESSION_USER_ID);
+        User user = userService.findUserById(userId);
+        if (user == null){
+            return;
+        }
+        commentService.delete(Long.parseLong(postId), Integer.parseInt(commSeq), Integer.parseInt(recommSeq));
+    }
+    @PostMapping("/{postId}/comment/modify/{commSeq}/{recommSeq}")
+    public String commentModify(
+            @PathVariable String postId,
+            @PathVariable String commSeq,
+            @PathVariable String recommSeq,
+            @RequestParam String content,
+            Model model, HttpServletRequest request){
+
+        HttpSession session = request.getSession(false);
+        if (session.getAttribute(Const.SESSION_USER_ID) == null){
+            return "template/post/error/authority_reject";
+        }
+        Long userId = (Long) session.getAttribute(Const.SESSION_USER_ID);
+        User user = userService.findUserById(userId);
+        if (user == null){
+            return "template/post/error/authority_reject";
+        }
+
+        commentService.modify(Long.parseLong(postId), Integer.parseInt(commSeq), Integer.parseInt(recommSeq), content);
+        model.addAttribute("postId", postId);
+        return "template/post/notice/comment_write";
+    }
+    /** 댓글 Create, Update, Delete */
 
 }

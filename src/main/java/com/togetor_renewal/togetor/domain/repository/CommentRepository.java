@@ -16,7 +16,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     @Query("select c from Comment c join fetch c.post p where p.id= :postId order by c.commSeq, c.recommSeq")
     List<Comment> findCommentsByPost(@Param("postId") Long postId);
-
+    Optional<Comment> findCommentByPostAndCommSeqAndRecommSeq(Post post, int commSeq, int recommSeq);
     Optional<Comment> findFirstByPostOrderByCommSeqDesc(Post post);
 
     Optional<Comment> findFirstByPostAndCommSeqAndRecommSeqNotOrderByRecommSeqDesc(Post post, int commSeq, int recommSeq);

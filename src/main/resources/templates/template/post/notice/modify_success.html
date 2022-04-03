@@ -8,8 +8,8 @@
 
 </body>
 <script th:inline="javascript">
-    alert('글이 성공적으로 등록되었습니다.');
-
-    window.location.href = '/';
+    const postId = [[${postId}]];
+    alert('글이 성공적으로 수정되었습니다.');
+    window.location.href = '/posts/' + postId;
 </script>
 </html>

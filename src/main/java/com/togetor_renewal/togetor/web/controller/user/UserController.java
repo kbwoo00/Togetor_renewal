@@ -1,11 +1,11 @@
 package com.togetor_renewal.togetor.web.controller.user;
 
 import com.togetor_renewal.togetor.domain.entity.User;
-import com.togetor_renewal.togetor.domain.DTO.user.UserModifyForm;
+import com.togetor_renewal.togetor.domain.DTO.UserModifyForm;
 import com.togetor_renewal.togetor.web.Const;
 import com.togetor_renewal.togetor.web.service.user.UserService;
-import com.togetor_renewal.togetor.domain.DTO.user.UserJoinForm;
-import com.togetor_renewal.togetor.domain.DTO.user.UserLoginForm;
+import com.togetor_renewal.togetor.domain.DTO.UserJoinForm;
+import com.togetor_renewal.togetor.domain.DTO.UserLoginForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -118,21 +118,21 @@ public class UserController {
              * TODO
              * 에러 예외페이지 처리
              */
-            return "/template/user/info-error";
+            return "template/user/error/info_error";
         }
 
         // 기존 회원정보들을 보이게 수정 시 참고할 수 있도록
         User user = userService.findUserById(Long.parseLong(userId));
         model.addAttribute("user", user);
 
-        return "template/user/info-modify";
+        return "/template/user/modify";
     }
 
     @PostMapping("/info/modify/{userId}")
     public String modify(@Validated @ModelAttribute("user") UserModifyForm form, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             log.info("err= {}", bindingResult);
-            return "/template/user/info-modify";
+            return "/template/user/modify";
         }
 
         // 회원정보(현재 비밀번호)를 올바로 입력했는지 확인
@@ -140,7 +140,7 @@ public class UserController {
         if (user == null) {
             bindingResult.reject("wrongPassword", "등록된 회원의 비밀번호와 일치하지 않습니다.");
             log.info("err= {}", bindingResult);
-            return "/template/user/info-modify";
+            return "/template/user/modify";
         }
         form.setUserId(user.getId());
 
@@ -152,7 +152,7 @@ public class UserController {
                 form.setEmail(form.getNewEmail());
             } else {
                 bindingResult.rejectValue("email", "duplicated.user.email");
-                return "/template/user/info-modify";
+                return "/template/user/modify";
             }
         }
 
@@ -161,7 +161,7 @@ public class UserController {
             // 비밀번호 일치여부 체크
             if (!form.getNewPass().equals(form.getNewPassConfirm())) {
                 bindingResult.reject("passEquals");
-                return "/template/user/info-modify";
+                return "/template/user/modify";
             }
             form.setPass(form.getNewPass());
         }
@@ -169,7 +169,7 @@ public class UserController {
         // 검증처리 성공시 유저정보 업데이트 로직
         userService.modifyUser(form);
 
-        return "/template/user/modify-success";
+        return "/template/user/notice/modify_success";
     }
 
     @GetMapping("/withdrawal/{userId}")
@@ -185,7 +185,7 @@ public class UserController {
              * TODO
              * 에러 예외페이지 처리
              */
-            return "/template/user/info-error";
+            return "template/user/error/info_error";
         }
 
         // 기존 회원정보들을 보이게 수정 시 참고할 수 있도록
@@ -225,12 +225,12 @@ public class UserController {
              * TODO
              * 에러 예외페이지 처리
              */
-            return "/template/user/info-error";
+            return "/template/user/error/info_error";
         }
 
         session.invalidate();
         userService.withdrawalUser(loginUser.getId());
 
-        return "/template/user/withdrawal-success";
+        return "/template/user/notice/withdrawal_success";
     }
 }
