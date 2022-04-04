@@ -4,7 +4,7 @@ import com.togetor_renewal.togetor.domain.entity.Post;
 import com.togetor_renewal.togetor.domain.entity.User;
 import com.togetor_renewal.togetor.domain.repository.PostRepository;
 import com.togetor_renewal.togetor.domain.repository.UserRepository;
-import com.togetor_renewal.togetor.domain.DTO.PostWriteForm;
+import com.togetor_renewal.togetor.domain.DTO.post.PostWriteForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

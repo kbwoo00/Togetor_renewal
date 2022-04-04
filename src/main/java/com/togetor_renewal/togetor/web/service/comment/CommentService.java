@@ -1,6 +1,6 @@
 package com.togetor_renewal.togetor.web.service.comment;
 
-import com.togetor_renewal.togetor.domain.DTO.CommentDTO;
+import com.togetor_renewal.togetor.domain.DTO.post.CommentDTO;
 import com.togetor_renewal.togetor.domain.entity.Comment;
 import com.togetor_renewal.togetor.domain.entity.Post;
 import com.togetor_renewal.togetor.domain.entity.User;

@@ -40,7 +40,7 @@
                 <div class="field-error" th:if="${#fields.hasGlobalErrors()}" th:each="err : ${#fields.globalErrors()}" th:text="${err}">
                     에러
                 </div>
-
+                <a th:href="@{/user/findPassword}" class="text-secondary text-decoration-underline">비밀번호 찾기</a>
                 <button class="w-100 btn btn-lg btn-primary mt-3" type="submit">로그인</button>
                 <button class="w-100 btn btn-lg btn-secondary" th:onclick="|location.href='/user/join'|" type="button">회원가입</button>
                 <p class="mt-5 mb-3 text-muted">&copy; 2017–2022</p>

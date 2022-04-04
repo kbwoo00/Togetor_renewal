@@ -1,11 +1,13 @@
 package com.togetor_renewal.togetor.web.controller.user;
 
+import com.togetor_renewal.togetor.domain.DTO.user.FindPasswordForm;
 import com.togetor_renewal.togetor.domain.entity.User;
-import com.togetor_renewal.togetor.domain.DTO.UserModifyForm;
+import com.togetor_renewal.togetor.domain.DTO.user.UserModifyForm;
 import com.togetor_renewal.togetor.web.Const;
+import com.togetor_renewal.togetor.web.service.user.MailService;
 import com.togetor_renewal.togetor.web.service.user.UserService;
-import com.togetor_renewal.togetor.domain.DTO.UserJoinForm;
-import com.togetor_renewal.togetor.domain.DTO.UserLoginForm;
+import com.togetor_renewal.togetor.domain.DTO.user.UserJoinForm;
+import com.togetor_renewal.togetor.domain.DTO.user.UserLoginForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -17,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.Optional;
 
 @Slf4j
@@ -26,6 +30,7 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService userService;
+    private final MailService mailService;
 
     @GetMapping("/join")
     public String joinForm(Model model) {
@@ -91,6 +96,32 @@ public class UserController {
         session.setAttribute(Const.SESSION_USER_ID, loginUser.getId());
 
         return "redirect:" + redirectURL;
+    }
+    @GetMapping("/findPassword")
+    public String findPassword(){
+        return "/template/user/find_password";
+    }
+
+    @PostMapping("/findPassword")
+    public void sendEmail(@RequestParam String name, @RequestParam String email){
+        mailService.sendNewPass(name, email);
+    }
+
+    @ResponseBody
+    @PostMapping("/checkInfo")
+    public FindPasswordForm checkUserByNameAndEmail(@RequestParam String name,
+                                                    @RequestParam String email){
+        Optional<User> user = userService.findUserByEmailAndName(email, name);
+
+        FindPasswordForm form = new FindPasswordForm();
+        if (!user.isEmpty()){
+            form = new FindPasswordForm(user.get().getName(),
+                    user.get().getEmail());
+            return form;
+        } else{
+
+            return form;
+        }
     }
 
     @PostMapping("/logout")
@@ -170,6 +201,18 @@ public class UserController {
         userService.modifyUser(form);
 
         return "/template/user/notice/modify_success";
+    }
+
+    @ResponseBody
+    @PostMapping("/checkDuplicate")
+    public String checkDuplicateEmail(@RequestParam String newEmail) throws UnsupportedEncodingException {
+        Optional<User> user = userService.checkDuplicateEmail(newEmail);
+        // 중복이메일 체크해서 이메일이 있으면 "" 반환
+        if (user.isEmpty()){
+            return "사용가능";
+        } else{
+            return "";
+        }
     }
 
     @GetMapping("/withdrawal/{userId}")

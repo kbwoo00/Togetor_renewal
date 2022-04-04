@@ -1,8 +1,8 @@
 package com.togetor_renewal.togetor.web.controller.post;
 
-import com.togetor_renewal.togetor.domain.DTO.CommentDTO;
+import com.togetor_renewal.togetor.domain.DTO.post.CommentDTO;
 import com.togetor_renewal.togetor.domain.entity.Post;
-import com.togetor_renewal.togetor.domain.DTO.PostWriteForm;
+import com.togetor_renewal.togetor.domain.DTO.post.PostWriteForm;
 import com.togetor_renewal.togetor.domain.entity.User;
 import com.togetor_renewal.togetor.web.Const;
 import com.togetor_renewal.togetor.web.service.comment.CommentService;

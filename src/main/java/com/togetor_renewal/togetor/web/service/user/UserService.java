@@ -2,8 +2,8 @@ package com.togetor_renewal.togetor.web.service.user;
 
 import com.togetor_renewal.togetor.domain.entity.User;
 import com.togetor_renewal.togetor.domain.repository.UserRepository;
-import com.togetor_renewal.togetor.domain.DTO.UserJoinForm;
-import com.togetor_renewal.togetor.domain.DTO.UserModifyForm;
+import com.togetor_renewal.togetor.domain.DTO.user.UserJoinForm;
+import com.togetor_renewal.togetor.domain.DTO.user.UserModifyForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +15,10 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+
+    public Optional<User> findUserByEmailAndName(String email, String name){
+        return userRepository.findByEmailAndName(email, name);
+    }
 
     public User confirmUser(String email, String pass) {
         return userRepository.findByEmail(email).filter(
@@ -60,4 +64,8 @@ public class UserService {
         userRepository.deleteById(userId);
     }
 
+
+    public void updatePassword(String name, String email, String tempPassword) {
+        userRepository.updatePassword(tempPassword, name, email);
+    }
 }

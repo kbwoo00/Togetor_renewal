@@ -40,7 +40,6 @@
                                        th:placeholder="'ex&#41; sample123@google.com'" placeholder="'ex&#41; sample123@google.com'" required>
                             </div>
                             <div class="field-error" th:errors="*{email}">
-                                이메일을 입력해주세요
                             </div>
                         </div>
 
@@ -65,7 +64,6 @@
                             <input type="text" th:errorclass="field-error" th:field="*{name}" class="form-control"
                                    id="name" value="" required>
                             <div class="field-error" th:errors="*{name}">
-                                이름을 입력해주세요
                             </div>
                         </div>
 
@@ -74,7 +72,6 @@
                             <input type="text" th:errorclass="field-error" th:placeholder="'5 ~ 20자까지 가능합니다.'" th:field="*{nickname}" class="form-control"
                                    id="nickname" value="" required>
                             <div class="field-error" th:errors="*{nickname}">
-                                별명을 입력해주세요
                             </div>
                         </div>
 
@@ -83,13 +80,11 @@
                             <input type="text" th:errorclass="field-error" th:field="*{phone}" class="form-control"
                                    th:placeholder="'ex&#41; 01012345678'" id="phone" value="" required>
                             <div class="field-error" th:errors="*{phone}">
-                                휴대폰번호를 입력해주세요
                             </div>
                         </div>
 
                         <label class="form-label fs-5 fw-bold">주소</label>
                         <div class="field-error m-0" th:errors="*{address}">
-                            주소를 입력해주세요
                         </div>
                         <div class="col-md-4">
                             <input type="text" th:field="*{postcode}" class="form-control"

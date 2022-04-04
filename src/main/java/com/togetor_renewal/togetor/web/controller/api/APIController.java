@@ -1,6 +1,6 @@
 package com.togetor_renewal.togetor.web.controller.api;
 
-import com.togetor_renewal.togetor.domain.DTO.PostCategory;
+import com.togetor_renewal.togetor.domain.DTO.post.PostCategory;
 import com.togetor_renewal.togetor.domain.entity.District;
 import com.togetor_renewal.togetor.domain.entity.Post;
 import com.togetor_renewal.togetor.web.service.post.ClassifyService;
