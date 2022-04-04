@@ -62,4 +62,8 @@ public class PostService {
     public void delete(Long postId) {
         postRepository.deleteById(postId);
     }
+
+    public void updateView(Long postId) {
+        postRepository.updateView(postId);
+    }
 }

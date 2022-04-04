@@ -17,8 +17,9 @@ public class PostCategory {
     private String siGunGu;
     private String eupMyeonDong;
     private String nickname;
+    private Long view;
 
-    public PostCategory(Long id, String title, String content, LocalDateTime regdate, String categoryTitle, String siDo, String siGunGu, String eupMyeonDong, String nickname) {
+    public PostCategory(Long id, String title, String content, LocalDateTime regdate, String categoryTitle, String siDo, String siGunGu, String eupMyeonDong, String nickname, Long view) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -28,5 +29,6 @@ public class PostCategory {
         this.siGunGu = siGunGu;
         this.eupMyeonDong = eupMyeonDong;
         this.nickname = nickname;
+        this.view = view;
     }
 }

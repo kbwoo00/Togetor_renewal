@@ -2,6 +2,7 @@ package com.togetor_renewal.togetor.domain.entity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -22,6 +23,8 @@ public class Post extends BaseTimeEntity{
     private String siDo;
     private String siGunGu;
     private String eupMyeonDong;
+    @Column(columnDefinition = "long default 0")
+    private Long view;
     @Column(name = "WRITER_NICKNAME")
     private String writer;
     @ManyToOne(fetch = FetchType.LAZY)

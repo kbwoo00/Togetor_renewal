@@ -57,6 +57,8 @@ public class PostController {
         List<CommentDTO> commentList = commentService.commentList(post.get().getId());
         model.addAttribute("commentList", commentList);
 
+        postService.updateView(post.get().getId());
+
         return "template/post/post_content";
     }
 

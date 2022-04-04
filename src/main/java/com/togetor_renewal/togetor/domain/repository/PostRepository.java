@@ -15,8 +15,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     Optional<Post> findById(Long postId);
     List<Post> findFirst5ByCategoryTitleOrderByIdDesc(String categoryTitle);
-    @Query("select p,c from Post p left join p.comments c where p.categoryTitle= :categoryTitle")
-    List<Post> findPostsByCategoryTitleOrderByIdDesc(@Param("categoryTitle") String categoryTitle);
+    List<Post> findPostsByCategoryTitleOrderByIdDesc(String categoryTitle);
     List<Post> findPostsByCategoryTitleAndSiDoOrderByIdDesc(String categoryTitle, String siDo);
     List<Post> findPostsByCategoryTitleAndSiDoAndSiGunGuOrderByIdDesc(String categoryTitle, String siDo, String siGunGu);
     List<Post> findPostsByCategoryTitleAndSiDoAndSiGunGuAndEupMyeonDongOrderByIdDesc(String categoryTitle, String siDo, String siGunGu, String eupMyeonDong);
@@ -27,4 +26,8 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     void updatePost(@Param("title") String title, @Param("content") String content, @Param("categoryTitle") String categoryTitle , @Param("chgdate")LocalDateTime chgdate, @Param("image") String image, @Param("siDo") String siDo, @Param("siGunGu") String siGunGu, @Param("eupMyeonDong") String eupMyeonDong, @Param("postId") Long postId);
 
 
+    @Transactional
+    @Modifying
+    @Query("update Post p set p.view = p.view + 1 where p.id= :postId")
+    void updateView(@Param("postId") Long postId);
 }
