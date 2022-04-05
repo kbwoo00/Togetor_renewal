@@ -31,11 +31,17 @@ public class UserService {
 
     public void join(UserJoinForm form) {
         // 검증 성공시 User 객체에 담아서 DB에 저장해야 된다.
-        User user = new User(
-                form.getEmail(), form.getPass(), form.getPassConfirm(),
-                form.getName(), form.getNickname(), form.getPhone(), form.getPostcode(),
-                form.getAddress(), form.getDetailAddress(), form.getExtraAddress()
-        );
+        User user = User.builder().email(form.getEmail()).
+                pass(form.getPass()).
+                passConfirm(form.getPassConfirm()).
+                name(form.getName()).
+                nickname(form.getNickname()).
+                phone(form.getPhone()).
+                postcode(form.getPostcode()).
+                address(form.getAddress()).
+                detailAddress(form.getDetailAddress()).
+                extraAddress(form.getExtraAddress()).
+                build();
 
         // 만든 User 객체를 Repository(DB)에 저장하자
         userRepository.save(user);

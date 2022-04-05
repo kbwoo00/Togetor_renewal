@@ -1,5 +1,7 @@
 package com.togetor_renewal.togetor.domain.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
@@ -10,7 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@NoArgsConstructor
+@NoArgsConstructor @AllArgsConstructor
+@Builder
 @Getter @Table(name = "POSTS")
 public class Post extends BaseTimeEntity{
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

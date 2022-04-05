@@ -15,9 +15,9 @@ public class TestDataInit {
 
     @PostConstruct
     public void testData() {
-        User user = new User(
-                "kbw@na", "123", "123", "홍길동", "전우치입니다.", "01012345678",
-                "51265", "서우린머", "구로구로구로", null);
+//        User user = new User(
+//                "kbw@na", "123", "123", "홍길동", "전우치입니다.", "01012345678",
+//                "51265", "서우린머", "구로구로구로", null);
 
 //        userRepository.save(user);
     }
