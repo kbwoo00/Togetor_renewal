@@ -18,7 +18,7 @@
         <form th:action="@{/user/logout}" th:method="post">
             <a th:if="${session.loginSession != null}"><button type="submit" class="btn btn btn-outline-dark me-2 fw-bold">로그아웃</button></a>
             <a th:href="@{/user/login}" th:if="${session.loginSession == null}"><button type="button" class="btn btn btn-outline-dark me-2 fw-bold">로그인</button></a>
-            <a th:href="@{/user/info/modify/{param}(param=${session.userId})}" th:if="${session.loginSession != null}"><button type="button" class="btn btn-outline-secondary me-2 fw-bold">마이페이지</button></a>
+            <a th:href="@{/user/myPostList/{param}(param=${session.userId})}" th:if="${session.loginSession != null}"><button type="button" class="btn btn-outline-secondary me-2 fw-bold">마이페이지</button></a>
             <a th:href="@{/post/write}" type="button" class="btn btn-outline-secondary me-2 fw-bold">글쓰기</a>
         </form>
 

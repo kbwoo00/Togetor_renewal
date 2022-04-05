@@ -1,9 +1,12 @@
 package com.togetor_renewal.togetor.web.controller.user;
 
 import com.togetor_renewal.togetor.domain.DTO.user.FindPasswordForm;
+import com.togetor_renewal.togetor.domain.entity.Post;
 import com.togetor_renewal.togetor.domain.entity.User;
 import com.togetor_renewal.togetor.domain.DTO.user.UserModifyForm;
 import com.togetor_renewal.togetor.web.Const;
+import com.togetor_renewal.togetor.web.service.post.BookmarkService;
+import com.togetor_renewal.togetor.web.service.post.PostService;
 import com.togetor_renewal.togetor.web.service.user.MailService;
 import com.togetor_renewal.togetor.web.service.user.UserService;
 import com.togetor_renewal.togetor.domain.DTO.user.UserJoinForm;
@@ -21,6 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -31,6 +35,8 @@ public class UserController {
 
     private final UserService userService;
     private final MailService mailService;
+    private final PostService postService;
+    private final BookmarkService bookmarkService;
 
     @GetMapping("/join")
     public String joinForm(Model model) {
@@ -97,28 +103,29 @@ public class UserController {
 
         return "redirect:" + redirectURL;
     }
+
     @GetMapping("/findPassword")
-    public String findPassword(){
+    public String findPassword() {
         return "/template/user/find_password";
     }
 
     @PostMapping("/findPassword")
-    public void sendEmail(@RequestParam String name, @RequestParam String email){
+    public void sendEmail(@RequestParam String name, @RequestParam String email) {
         mailService.sendNewPass(name, email);
     }
 
     @ResponseBody
     @PostMapping("/checkInfo")
     public FindPasswordForm checkUserByNameAndEmail(@RequestParam String name,
-                                                    @RequestParam String email){
+                                                    @RequestParam String email) {
         Optional<User> user = userService.findUserByEmailAndName(email, name);
 
         FindPasswordForm form = new FindPasswordForm();
-        if (!user.isEmpty()){
+        if (!user.isEmpty()) {
             form = new FindPasswordForm(user.get().getName(),
                     user.get().getEmail());
             return form;
-        } else{
+        } else {
 
             return form;
         }
@@ -208,9 +215,9 @@ public class UserController {
     public String checkDuplicateEmail(@RequestParam String newEmail) throws UnsupportedEncodingException {
         Optional<User> user = userService.checkDuplicateEmail(newEmail);
         // 중복이메일 체크해서 이메일이 있으면 "" 반환
-        if (user.isEmpty()){
+        if (user.isEmpty()) {
             return "사용가능";
-        } else{
+        } else {
             return "";
         }
     }
@@ -235,7 +242,7 @@ public class UserController {
         User user = userService.findUserById(Long.parseLong(userId));
         model.addAttribute("user", user);
 
-        if (model.getAttribute(Const.SUCCESS_CHECK) != null){
+        if (model.getAttribute(Const.SUCCESS_CHECK) != null) {
             // 회원이 무사히 탈퇴하면 alert창 띄우기 위해
             model.addAttribute("checkSuccess", true);
         }
@@ -245,7 +252,7 @@ public class UserController {
 
     @PostMapping("/withdrawal/{userId}")
     public String withdrawal(@Validated @ModelAttribute("user") UserLoginForm form,
-                            BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response) {
+                             BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response) {
 
         if (bindingResult.hasErrors()) {
             log.info("err= {}", bindingResult);
@@ -275,5 +282,27 @@ public class UserController {
         userService.withdrawalUser(loginUser.getId());
 
         return "/template/user/notice/withdrawal_success";
+    }
+
+    @GetMapping("/myPostList/{userId}")
+    public String myPostList(@PathVariable String userId, Model model, HttpServletRequest request) {
+        List<Post> postList = postService.findPostsByUserId(Long.parseLong(userId));
+        model.addAttribute("postList", postList);
+
+        HttpSession session = request.getSession(false);
+        if ( (Long)(session.getAttribute(Const.SESSION_USER_ID)) != Long.parseLong(userId)) {
+            return "/template/post/error/authority_reject";
+        }
+
+        return "/template/user/mypost_list";
+    }
+
+    @GetMapping("/bookmarkList/{userId}")
+    public String bookmarkList(@PathVariable String userId, Model model, HttpServletRequest request) {
+
+        List<Post> postList = postService.findBookmarkPostList(Long.parseLong(userId));
+        model.addAttribute("postList", postList);
+
+        return "/template/user/bookmark_list";
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -66,4 +67,11 @@ public class PostService {
         postRepository.updateView(postId);
     }
 
+    public List<Post> findPostsByUserId(long userId) {
+        return postRepository.findPostsByUserIdOrderByIdDesc(userId);
+    }
+
+    public List<Post> findBookmarkPostList(long userId) {
+        return postRepository.findBookmarkPosts(userId);
+    }
 }

@@ -19,6 +19,10 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findPostsByCategoryTitleAndSiDoOrderByIdDesc(String categoryTitle, String siDo);
     List<Post> findPostsByCategoryTitleAndSiDoAndSiGunGuOrderByIdDesc(String categoryTitle, String siDo, String siGunGu);
     List<Post> findPostsByCategoryTitleAndSiDoAndSiGunGuAndEupMyeonDongOrderByIdDesc(String categoryTitle, String siDo, String siGunGu, String eupMyeonDong);
+    List<Post> findPostsByUserIdOrderByIdDesc(Long userId);
+
+    @Query("select p from Post p left join p.bookmarks b where b.user.id= :userId and p.id = b.post.id order by p.id desc")
+    List<Post> findBookmarkPosts(@Param("userId") Long userId);
 
     @Transactional
     @Modifying
@@ -30,4 +34,5 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Modifying
     @Query("update Post p set p.view = p.view + 1 where p.id= :postId")
     void updateView(@Param("postId") Long postId);
+
 }

@@ -12,10 +12,10 @@
         <li class="pb-3 pt-3 list-group-item align-items-start list-group-item-secondary">
             <div class="ms-2 me-auto">
                 <div class="fw-bold fs-4 mb-4">게시물 관리</div>
-                <a class="text-decoration-none a-tag" th:href href="/">
+                <a class="text-decoration-none a-tag" th:href="@{/user/myPostList/{param}(param=${session.userId})}" href="/">
                     <p class="mb-1 ">내가 쓴 글</p>
                 </a>
-                <a class="text-decoration-none a-tag" th:href href="/">
+                <a class="text-decoration-none a-tag" th:href="@{/user/bookmarkList/{param}(param=${session.userId})}" href="/">
                     <p class="mb-1 ">관심 있는 글</p>
                 </a>
             </div>
