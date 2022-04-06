@@ -21,6 +21,11 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findPostsByCategoryTitleAndSiDoAndSiGunGuAndEupMyeonDongOrderByIdDesc(String categoryTitle, String siDo, String siGunGu, String eupMyeonDong);
     List<Post> findPostsByUserIdOrderByIdDesc(Long userId);
 
+    @Transactional
+    @Modifying
+    @Query("update Post p set p.commentCount= p.commentCount+1 where p.id= :postId")
+    void addCommentCount(@Param("postId") Long postId);
+
     @Query("select p from Post p left join p.bookmarks b where b.user.id= :userId and p.id = b.post.id order by p.id desc")
     List<Post> findBookmarkPosts(@Param("userId") Long userId);
 

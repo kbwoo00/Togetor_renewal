@@ -8,7 +8,6 @@
         .post-info {
             font-size: small;
         }
-
     </style>
     <link th:href="@{/css/bootstrap.min.css}" href="/templates/css/bootstrap.min.css" rel="stylesheet"/>
 </head>
@@ -21,7 +20,7 @@
         <ul class="nav nav-tabs mb-3 justify-content-center">
             <li th:each="category : ${categoryList}" class="nav-item me-2">
                 <!-- class=active이면 회색으로 변함. -->
-                <a th:classappend="${category.title == categoryTitle ? 'active' : ''}"
+                <a th:classappend="${category.title == categoryTitle ? 'active text-warning' : 'text-secondary'}"
                    class="nav-link fw-bold fs-5" th:href="@{/posts/{param}(param=${category.title})}"
                    href="#" th:text="${category.title}">운동</a>
             </li>

@@ -21,11 +21,11 @@
                 </div>
                 <ul class="list-unstyled">
                     <li th:each="post : ${postList}">
-                        <div th:if="${post.categoryTitle == category.title}" class="row justify-content-between border">
-                            <a th:text="${post.title}" th:href="@{/post/{param1}(param1=${post.id})}" href="/" class="text-decoration-none text-dark col-md-auto">
+                        <div th:if="${post.categoryTitle == category.title}" class="row justify-content-between border p-2">
+                            <a th:text="${post.title}" th:href="@{/post/{param1}(param1=${post.id})}" href="/" class="fs-6 text-truncate text-decoration-none text-primary col-md-auto">
                                 제목
                             </a>
-                            <p th:text="|${post.siDo} ${post.siGunGu} ${post.eupMyeonDong}|" class="col-md-auto">장소</p>
+                            <small th:text="|${post.siDo} ${post.siGunGu} ${post.eupMyeonDong}|" class="col-md-auto small">장소</small>
                         </div>
                     </li>
                 </ul>

@@ -8,8 +8,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api")
@@ -26,6 +28,8 @@ public class APIController {
     public List<PostCategory> postCategoryList(@PathVariable String categoryTitle, Model model) {
         List<Post> postList = classifyService.findPostsByCategory(categoryTitle);
 
+        model.addAttribute("localDateTime", LocalDateTime.now());
+        
         return getPostCategories(postList, model);
     }
 
@@ -62,7 +66,8 @@ public class APIController {
                     post.getId(), post.getTitle(), post.getContent(), post.getRegdate(),
                     post.getCategoryTitle(), post.getSiDo(), post.getSiGunGu(), post.getEupMyeonDong(),
                     post.getWriter(),
-                    post.getView()
+                    post.getView(),
+                    post.getCommentCount()
             );
             postCategoryList.add(postCategory);
         }

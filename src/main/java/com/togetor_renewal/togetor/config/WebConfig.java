@@ -1,4 +1,4 @@
-package com.togetor_renewal.togetor;
+package com.togetor_renewal.togetor.config;
 
 import com.togetor_renewal.togetor.web.interceptor.LoginCheckInterceptor;
 import org.springframework.context.annotation.Configuration;

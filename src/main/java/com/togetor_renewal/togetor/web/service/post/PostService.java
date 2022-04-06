@@ -74,4 +74,8 @@ public class PostService {
     public List<Post> findBookmarkPostList(long userId) {
         return postRepository.findBookmarkPosts(userId);
     }
+
+    public void addComentCount(long postId) {
+        postRepository.addCommentCount(postId);
+    }
 }
