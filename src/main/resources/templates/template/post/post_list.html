@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Togetor 게시물들</title>
+    <style>
+        .post-info {
+            font-size: small;
+        }
+
+    </style>
+    <link th:href="@{/css/bootstrap.min.css}" href="/templates/css/bootstrap.min.css" rel="stylesheet"/>
+</head>
+<body>
+<div class="container">
+    <header th:replace="~{template/fragments/header :: header}"></header>
+</div>
+<main>
+    <div class="container">
+        <ul class="nav nav-tabs mb-3 justify-content-center">
+            <li th:each="category : ${categoryList}" class="nav-item me-2">
+                <!-- class=active이면 회색으로 변함. -->
+                <a th:classappend="${category.title == categoryTitle ? 'active' : ''}"
+                   class="nav-link fw-bold fs-5" th:href="@{/posts/{param}(param=${category.title})}"
+                   href="#" th:text="${category.title}">운동</a>
+            </li>
+        </ul>
+        <div th:replace="~{template/fragments/select_region :: select}"></div>
+        <h3 class="text-center" th:if="${siDo != null && siGunGu != null && eupMyeonDong != null}"
+            th:text="|현재 선택된 지역은 ${siDo} ${siGunGu} ${eupMyeonDong} 입니다.|">현재 선택된 지역은 XX입니다.</h3>
+        <h3 class="text-center" th:if="${siDo != null && siGunGu != null && eupMyeonDong == null}"
+            th:text="|현재 선택된 지역은 ${siDo} ${siGunGu} 입니다.|">현재 선택된 지역은 XX입니다.</h3>
+        <h3 class="text-center" th:if="${siDo != null && siGunGu == null && eupMyeonDong == null}"
+            th:text="|현재 선택된 지역은 ${siDo} 입니다.|">현재 선택된 지역은 XX입니다.</h3>
+
+        <div id="content" class="row mb-2 mt-4 me-0 p-0 g-0">
+        </div>
+    </div>
+
+</main>
+<div class="container mt-5">
+    <footer th:replace="~{template/fragments/footer :: footer}"></footer>
+</div>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script th:replace="~{template/post/script/list_script :: postList}"/>
+<script th:src="@{/js/bootstrap.bundle.min.js}" src="/templates/js/bootstrap.bundle.min.js"/>
+
+</body>
+</html>
+

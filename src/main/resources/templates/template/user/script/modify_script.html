@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script th:fragment="modify" th:inline="javascript">
+    $(document).ready(function () {
+        // 회원정보가 무사히 수정되었다는 메시지창 띄우기
+        let isSuccess = [[${checkSuccess}]];
+        if (isSuccess) {
+            alert('회원정보가 변경되었습니다.');
+        }
+
+        // 비밀번호 변경을 원하면 변경창 띄우게 하기
+        const updatePassBtn = $("#updatePassBtn");
+        let passUpdate = $("#passUpdate")
+
+        updatePassBtn.click(function () {
+            if ($("#newPassForm").val() != undefined) {
+                passUpdate.empty();
+            } else {
+                passUpdate.prepend("<div id='newPassForm' class=\"col-md-8\">" +
+                    "<label class=\"form-label fs-5 fw-bold text-primary\">새 비밀번호</label><br>" +
+                    "<input type=\"password\" class=\"form-control\" id=\"newPass\" name=\"newPass\" value=\"\" required>" +
+                    "<span class=\"font-monospace field-error\">8~20자까지 영문자, 숫자, 특수문자(@$!%*#?&)가 적어도 하나씩 포함돼야 합니다.</span></div>" +
+                    "<div class=\"col-md-8\">" +
+                    "<label class=\"form-label fs-5 fw-bold text-primary\">새 비밀번호 확인</label>" +
+                    "<input type=\"password\" class=\"form-control\" id=\"newPassConfirm\" name=\"newPassConfirm\" value=\"\" required>" +
+                    "<span class=\"font-monospace\">비밀번호가 일치합니다.</span>" + "</div>");
+
+                // 비밀번호 유효성 검사
+                let newPass = $("#newPass");
+                let newPassConfirm = $("#newPassConfirm");
+                const passFilter = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,20}$/;
+
+                newPass.keyup(function () {
+                    if (newPass.val() != newPassConfirm.val()) {
+                        newPassConfirm.next().attr('class', 'field-error');
+                        newPassConfirm.next().text('비밀번호가 일치하지 않습니다.');
+                    } else {
+                        newPassConfirm.next().replaceWith('<span class="font-monospace">비밀번호가 일치합니다.</span>');
+                    }
+
+                    if (passFilter.test(newPass.val())) {
+                        newPass.next().removeClass('field-error');
+                    } else {
+                        newPass.next().addClass('field-error');
+                    }
+                });
+                newPassConfirm.keyup(function () {
+                    if (newPass.val() != newPassConfirm.val()) {
+                        newPassConfirm.next().attr('class', 'field-error');
+                        newPassConfirm.next().text('비밀번호가 일치하지 않습니다.');
+                    } else {
+                        newPassConfirm.next().replaceWith('<span class="font-monospace">비밀번호가 일치합니다.</span>');
+                    }
+                });
+            }
+        });
+
+        // 이메일 변경을 원하면 이메일 변경창 띄우게 하기
+        const updateEmailBtn = $("#updateEmailBtn");
+        let emailUpdate = $("#emailUpdate")
+
+        updateEmailBtn.click(function () {
+            if ($("#newEmailForm").val() != undefined) {
+                emailUpdate.empty();
+            } else {
+                emailUpdate.prepend("<div id='newEmailForm' class=\"col-md-8\">" +
+                    "<label class=\"form-label fs-5 fw-bold text-primary\">새 이메일</label><br>" +
+                    "<input id='emailCheck' type=\"email\" class=\"form-control\" name=\"newEmail\" id=\"newEmail\" value=\"\" required>" +
+                    "<span class=\"font-monospace field-error\">올바른 형식의 이메일주소가 아닙니다.</span></div>");
+                let emailCheck = $("#emailCheck");
+                const emailFilter = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
+                emailCheck.keyup(function () {
+                    console.log(emailCheck.val());
+                    if (!emailFilter.test(emailCheck.val())) {
+                        emailCheck.next().replaceWith('<span class="font-monospace field-error">올바른 형식의 이메일주소가 아닙니다.</span>');
+                    } else {
+                        $.ajax({
+                            type: 'post',
+                            url: "/user/checkDuplicate",
+                            data: {
+                                newEmail : emailCheck.val()
+                            },
+                            dataType: "text",
+                            success: function (newEmail){
+                                if (newEmail == ""){
+                                    // 이메일 중복 에러 메시지
+                                    emailCheck.next().replaceWith('<span class="text-danger font-monospace">등록된 이메일주소입니다.</span>');
+                                }
+                                else{
+                                    // 이메일 사용가능 메시지
+                                    emailCheck.next().replaceWith('<span class="font-monospace">사용가능한 이메일주소입니다.</span>');
+                                }
+                            }
+                        });
+                    }
+                })
+            }
+        });
+
+        $("#updateAddress").click(function () {
+            $("#detailAddress").attr('readonly', false);
+            $("#extraAddress").attr('readonly', false);
+        });
+        $("#updateName").click(function () {
+            $("#name").attr('readonly', false);
+        });
+        $("#updateNickname").click(function () {
+            $("#nickname").attr('readonly', false);
+        });
+        $("#updatePhone").click(function () {
+            $("#phone").attr('readonly', false);
+        });
+    });
+</script>
+</body>
+</html>

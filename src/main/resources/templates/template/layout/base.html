@@ -1,9 +1,8 @@
 <!doctype html>
-<html lang="en" th:fragment="layout (title, content, style)" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" th:fragment="layout (title, content, style, script)" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <title th:replace="${title}">Hello, world!</title>
     <style th:replace="${style}"></style>
     <link th:href="@{/css/bootstrap.min.css}" href="/templates/css/bootstrap.min.css" rel="stylesheet"/>
@@ -19,7 +18,7 @@
     <footer th:replace="~{template/fragments/footer :: footer}"></footer>
 </div>
 
-<script th:src="@{/js/bootstrap.bundle.min.js}" src="/templates/js/bootstrap.bundle.min.js"/>
+<script th:replace="${script}" th:src="@{/js/bootstrap.bundle.min.js}" src="/templates/js/bootstrap.bundle.min.js"/>
 </body>
 </html>
 

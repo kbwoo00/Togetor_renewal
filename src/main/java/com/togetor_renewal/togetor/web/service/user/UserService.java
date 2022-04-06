@@ -2,12 +2,11 @@ package com.togetor_renewal.togetor.web.service.user;
 
 import com.togetor_renewal.togetor.domain.entity.User;
 import com.togetor_renewal.togetor.domain.repository.UserRepository;
-import com.togetor_renewal.togetor.domain.validation.user.UserJoinForm;
-import com.togetor_renewal.togetor.domain.validation.user.UserModifyForm;
+import com.togetor_renewal.togetor.domain.DTO.user.UserJoinForm;
+import com.togetor_renewal.togetor.domain.DTO.user.UserModifyForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 
@@ -16,6 +15,10 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+
+    public Optional<User> findUserByEmailAndName(String email, String name){
+        return userRepository.findByEmailAndName(email, name);
+    }
 
     public User confirmUser(String email, String pass) {
         return userRepository.findByEmail(email).filter(
@@ -28,13 +31,17 @@ public class UserService {
 
     public void join(UserJoinForm form) {
         // 검증 성공시 User 객체에 담아서 DB에 저장해야 된다.
-        LocalDateTime now = LocalDateTime.now();
-        User user = new User(
-                LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), now.getHour(), now.getMinute(), now.getSecond()),
-                form.getEmail(), form.getPass(), form.getPassConfirm(),
-                form.getName(), form.getNickname(), form.getPhone(), form.getPostcode(),
-                form.getAddress(), form.getDetailAddress(), form.getExtraAddress()
-        );
+        User user = User.builder().email(form.getEmail()).
+                pass(form.getPass()).
+                passConfirm(form.getPassConfirm()).
+                name(form.getName()).
+                nickname(form.getNickname()).
+                phone(form.getPhone()).
+                postcode(form.getPostcode()).
+                address(form.getAddress()).
+                detailAddress(form.getDetailAddress()).
+                extraAddress(form.getExtraAddress()).
+                build();
 
         // 만든 User 객체를 Repository(DB)에 저장하자
         userRepository.save(user);
@@ -59,8 +66,12 @@ public class UserService {
         );
     }
 
-    public void withDrawalUser(Long userId){
+    public void withdrawalUser(Long userId){
         userRepository.deleteById(userId);
     }
 
+
+    public void updatePassword(String name, String email, String tempPassword) {
+        userRepository.updatePassword(tempPassword, name, email);
+    }
 }

@@ -1,8 +1,7 @@
-package com.togetor_renewal.togetor.domain.validation.post;
+package com.togetor_renewal.togetor.domain.DTO.post;
 
 import lombok.Data;
 
-import javax.validation.constraints.Max;
 import javax.validation.constraints.NotBlank;
 
 @Data

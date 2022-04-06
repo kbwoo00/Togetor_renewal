@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{template/layout/base :: layout(~{::title}, ~{::main}, ~{::style})}">
+      th:replace="~{template/layout/base :: layout(~{::title}, ~{::main}, ~{::style}, ~{::script})}">
 <head>
     <title>Togetor</title>
     <style></style>
@@ -8,9 +8,8 @@
 <body>
 <main>
     <div class="container">
-        <div th:replace="~{template/fragments/select_region :: select}"></div>
         <div class="row g-5 mt-2">
-            <div th:each="category : ${categories}" class="col-md-6">
+            <div th:each="category : ${categoryList}" class="col-md-6">
                 <div class="row justify-content-between">
                     <div class="col-md-auto">
                         <h3 th:text="${category.title}">등산</h3>
@@ -21,16 +20,12 @@
                     </div>
                 </div>
                 <ul class="list-unstyled">
-                    <li>
-                        <div class="row justify-content-between border">
-                            <a href="/" class="text-decoration-none text-dark col-md-auto">제목</a>
-                            <p class="col-md-auto">장소</p>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="row justify-content-between border">
-                            <a href="/" class="text-decoration-none text-dark col-md-auto">제목</a>
-                            <p class="col-md-auto">장소</p>
+                    <li th:each="post : ${postList}">
+                        <div th:if="${post.categoryTitle == category.title}" class="row justify-content-between border">
+                            <a th:text="${post.title}" th:href="@{/post/{param1}(param1=${post.id})}" href="/" class="text-decoration-none text-dark col-md-auto">
+                                제목
+                            </a>
+                            <p th:text="|${post.siDo} ${post.siGunGu} ${post.eupMyeonDong}|" class="col-md-auto">장소</p>
                         </div>
                     </li>
                 </ul>
@@ -38,6 +33,40 @@
         </div>
     </div>
 </main>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script th:inline="javascript">
+
+    $(document).ready(function (){
+        const siDo = [[${siDo}]];
+        const siGunGu = [[${siGunGu}]];
+        const eupMyeonDong = [[${eupMyeonDong}]];
+        $("#siDoSel").val(siDo).prop("selected", true);
+        $("#siGunGuSel").val(siGunGu).prop("selected", true);
+        $("#eupMyeonDongSel").val(eupMyeonDong).prop("selected", true);
+
+
+        $("#siDoSel").change(function (){
+            const selectedSido = $("#siDoSel option:selected").val();
+
+            window.location.href = '/' + selectedSido;
+        });
+
+        $("#siGunGuSel").change(function (){
+            const selectedSigungu = $("#siGunGuSel option:selected").val();
+
+            window.location.href = '/' + siDo + '/' + selectedSigungu;
+        });
+
+        $("#eupMyeonDongSel").change(function (){
+            const selectedEupmyeondong = $("#eupMyeonDongSel option:selected").val();
+
+            window.location.href = '/' + siDo + '/' + siGunGu + '/' + selectedEupmyeondong;
+        });
+    });
+</script>
+<script th:src="@{/js/bootstrap.bundle.min.js}" src="/templates/js/bootstrap.bundle.min.js"/>
 </body>
+
+
 </html>
 

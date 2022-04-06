@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>게시물 글쓰기</title>
+    <style>
+        .write-form {
+            max-width: 1000px;
+        }
+        .field-error {
+            border-color: red;
+            color: red;
+        }
+
+        .form-label {
+            font-size: small;
+        }
+    </style>
+    <!--    <link th:href="@{/css/summernote/summernote-lite.css}" rel="stylesheet" href="/templates/css/summernote-lite.css">-->
+    <link th:href="@{/css/bootstrap.min.css}" href="/templates/css/bootstrap.min.css" rel="stylesheet"/>
+</head>
+<body>
+<div class="container">
+    <header th:replace="~{template/fragments/header :: header}"></header>
+</div>
+<main>
+    <h3 class="text-muted text-center mb-3">글 수정</h3>
+    <form th:action="@{/post/modify/{param}(param=${post.id})}" action="/" th:object="${post}" method="post" enctype="multipart/form-data">
+        <div class="container border rounded write-form">
+            <div class="mb-3 mt-3">
+                <input type="text" th:errorclass="field-error" class="form-control" th:field="*{title}" id="title" placeholder="제목을 입력해주세요" required>
+                <div class="field-error" th:errors="*{title}">
+                    제목을 입력해주세요.
+                </div>
+            </div>
+
+            <select id="categoryTitle" name="categoryTitle" class="form-select mb-3">
+                <option th:value="*{categoryTitle}" th:field="*{categoryTitle}" th:text="*{categoryTitle}" value="">카테고리를 선택해주세요</option>
+                <option th:each="category : ${categoryList}" th:value="${category.title}"
+                        th:text="${category.title}" >카테고리</option>
+            </select>
+
+            <div class="row mb-3">
+                <div class="col-md-auto">
+                    <div class="row">
+                        <div class="col-md-auto">
+                            <select required id="siDo" name="siDo" class="form-select select-region">
+                                <option class="text-muted" value="">지역을 선택하세요</option>
+                                <option selected th:text="${post.siDo}" th:value="${post.siDo}"></option>
+                                <option value="서울특별시">서울특별시</option>
+                                <option value="부산광역시">부산광역시</option>
+                                <option value="대구광역시">대구광역시</option>
+                                <option value="인천광역시">인천광역시</option>
+                                <option value="광주광역시">광주광역시</option>
+                                <option value="대전광역시">대전광역시</option>
+                                <option value="울산광역시">울산광역시</option>
+                                <option value="세종특별자치시">세종특별자치시</option>
+                                <option value="경기도">경기도</option>
+                                <option value="강원도">강원도</option>
+                                <option value="충청북도">충청북도</option>
+                                <option value="충청남도">충청남도</option>
+                                <option value="전라북도">전라북도</option>
+                                <option value="전라남도">전라남도</option>
+                                <option value="경상북도">경상북도</option>
+                                <option value="경상남도">경상남도</option>
+                                <option value="경상남도">경상남도</option>
+                                <option value="제주특별자치도">제주특별자치도</option>
+                            </select>
+                        </div>
+                        <div class="col-md-auto">
+                            <select required id="siGunGu" name="siGunGu" class="form-select select-region">
+                                <option>동네를 선택하세요</option>
+                                <option selected th:text="${post.siGunGu}" th:value="${post.siGunGu}"></option>
+                            </select>
+                        </div>
+                        <div class="col-md-auto">
+                            <select required id="eupMyeonDong" name="eupMyeonDong" class="form-select select-region">
+                                <option>동을 선택하세요</option>
+                                <option th:text="${post.eupMyeonDong}" selected th:value="${post.eupMyeonDong}"></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">관련 사진</label>
+                <input class="form-control form-control-sm" id="file" name="file" type="file">
+            </div>
+
+            <div class="mb-3">
+                <textarea th:errorclass="field-error" th:field="${post.content}" required class="form-control" name="editordata" rows="15"></textarea>
+                <div class="field-error" th:errors="*{content}">
+                    내용을 입력해주세요.
+                </div>
+            </div>
+
+            <div class="row justify-content-around mb-4">
+                <button type="submit" class="btn btn-secondary col-lg-2 col-md-auto fs-5">수정하기</button>
+                <button th:onclick="|window.history.back();|" type="button"
+                        class="btn btn-outline-secondary col-lg-2 col-md-auto fs-5">취소
+                </button>
+            </div>
+        </div>
+    </form>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script th:replace="~{template/post/script/modify_script :: modify}"/>
+
+    <!--    섬머노트 적용시 사용할 스크립트
+
+    <script th:src="@{/js/summernote/summernote-lite.js}" src="/templates/js/summernote-lite.js"></script>
+    <script th:src="@{/js/summernote/lang/summernote-ko-KR.js}" src="/templates/js/lang/summernote-ko-KR.js"></script>
+    <script>
+        $(document).ready(function() {
+            //여기 아래 부분
+            $('#summernote').summernote({
+                height: 300,                 // 에디터 높이
+                minHeight: null,             // 최소 높이
+                maxHeight: null,             // 최대 높이
+                focus: true,                  // 에디터 로딩후 포커스를 맞출지 여부
+                lang: "ko-KR",					// 한글 설정
+                placeholder: '최대 2048자까지 쓸 수 있습니다'	//placeholder 설정
+            });
+        });
+    </script>
+    -->
+</main>
+</body>
+</html>
+

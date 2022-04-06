@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>마이페이지</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        .btn {
+            position: relative;
+            z-index: 0;
+        }
+        #layer {
+            display: none;
+            position: fixed;
+            overflow: hidden;
+            z-index: 100;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .field-error {
+            border-color: red;
+            color: red;
+        }
+    </style>
+    <link th:href="@{/css/bootstrap.min.css}" href="/templates/css/bootstrap.min.css" rel="stylesheet"/>
+
+</head>
+<body>
+<div class="container">
+    <header th:replace="~{template/fragments/header :: header}"></header>
+</div>
+<main>
+    <div class="container ">
+        <div class="row">
+            <div th:replace="~{template/fragments/sidebar :: sidebar}"></div>
+            <div class="ms-5 col-md-auto d-flex flex-column align-items-stretch flex-shrink-0 bg-white" style="width: 600px;">
+                <h3 class="fs-5 fw-bold text-center text-secondary">북마크한 글 목록</h3>
+                <div class="list-group list-group-flush border-bottom scrollarea">
+                    <a th:each="post: ${postList}" th:href="@{/post/{param}(param=${post.id})}" href="#" class="list-group-item list-group-item-action py-3 lh-tight" aria-current="true">
+                        <div class="d-flex w-100 align-items-center justify-content-between">
+                            <strong th:text="${post.title}" class="mb-1">List group item heading</strong>
+                            <small th:text="${post.regdate}">작성날짜</small>
+                        </div>
+                        <div th:text="${post.content}" class="text-truncate col-10 mb-1 small">내용</div>
+                    </a>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</main>
+<div class="container mt-5">
+    <footer th:replace="~{template/fragments/footer :: footer}"></footer>
+</div>
+<script th:src="@{/js/bootstrap.bundle.min.js}" src="../../js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+
+</body>
+</html>
+
