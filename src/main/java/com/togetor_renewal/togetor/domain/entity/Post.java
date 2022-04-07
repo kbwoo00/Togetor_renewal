@@ -1,5 +1,6 @@
 package com.togetor_renewal.togetor.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,12 +32,14 @@ public class Post extends BaseTimeEntity{
     @Column(name = "WRITER_NICKNAME")
     private String writer;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_ID")
+    @JoinColumn(name = "USER_ID") @JsonBackReference
     private User user;
     @OneToMany(mappedBy = "post")
     private List<Comment> comments = new ArrayList<>();
     @OneToMany(mappedBy = "post")
     private List<Bookmark> bookmarks = new ArrayList<>();
+    @Column(name = "COMM_COUNT", columnDefinition = "long default 0")
+    private Long commentCount;
 
     public Post(String title, String content, String writer, String image, String categoryTitle, String siDo, String siGunGu, String eupMyeonDong, User user) {
         this.title = title;
@@ -48,6 +51,8 @@ public class Post extends BaseTimeEntity{
         this.siGunGu = siGunGu;
         this.eupMyeonDong = eupMyeonDong;
         this.user = user;
+        this.commentCount = 0L;
+        this.view = 0L;
     }
 
     public Post(String title, String content, String categoryTitle, String image, String siDo, String siGunGu, String eupMyeonDong) {

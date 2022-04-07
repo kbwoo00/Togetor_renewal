@@ -65,8 +65,6 @@ public class PostController {
             model.addAttribute("writer", false);
         }
 
-
-
         // 댓글 리스트들 불러오기
         List<CommentDTO> commentList = commentService.commentList(post.get().getId());
         model.addAttribute("commentList", commentList);
@@ -190,6 +188,7 @@ public class PostController {
         }
 
         commentService.commentWrite(post.get(), user, content);
+        postService.addComentCount(Long.parseLong(postId));
 
         model.addAttribute("postId", postId);
 
@@ -216,6 +215,8 @@ public class PostController {
         }
 
         commentService.recommentWrite(post.get(), user, content, commSeq);
+
+        postService.addComentCount(Long.parseLong(postId));
 
         model.addAttribute("postId", postId);
 

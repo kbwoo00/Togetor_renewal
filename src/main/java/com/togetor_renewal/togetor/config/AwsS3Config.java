@@ -1,4 +1,4 @@
-package com.togetor_renewal.togetor;
+package com.togetor_renewal.togetor.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;

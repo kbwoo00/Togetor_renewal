@@ -5,21 +5,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
-        .btn {
-            position: relative;
-            z-index: 0;
+        .a-tag:hover{
+            color: black;
         }
-        #layer {
-            display: none;
-            position: fixed;
-            overflow: hidden;
-            z-index: 100;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .field-error {
-            border-color: red;
-            color: red;
+        .presentPage{
+            color: black;
         }
     </style>
     <link th:href="@{/css/bootstrap.min.css}" href="/templates/css/bootstrap.min.css" rel="stylesheet"/>
@@ -38,9 +28,10 @@
                 <div class="list-group list-group-flush border-bottom scrollarea">
                     <a th:each="post: ${postList}" th:href="@{/post/{param}(param=${post.id})}" href="#" class="list-group-item list-group-item-action py-3 lh-tight" aria-current="true">
                         <div class="d-flex w-100 align-items-center justify-content-between">
-                            <strong th:text="${post.title}" class="mb-1">List group item heading</strong>
+                            <strong th:text="${post.title}" class="fs-5 mb-1">제목</strong>
                             <small th:text="${post.regdate}">작성날짜</small>
                         </div>
+                        <small th:text="${post.categoryTitle}" class="mb-1 col-md-auto small text-warning">카테고리</small>
                         <div th:text="${post.content}" class="text-truncate col-10 mb-1 small">내용</div>
                     </a>
                 </div>

@@ -7,6 +7,7 @@ import com.togetor_renewal.togetor.domain.repository.CategoryRepository;
 import com.togetor_renewal.togetor.domain.repository.DistrictRepository;
 import com.togetor_renewal.togetor.domain.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -44,7 +45,7 @@ public class ClassifyService {
         return postRepository.findPostsByCategoryTitleAndSiDoAndSiGunGuAndEupMyeonDongOrderByIdDesc(categoryTitle, siDo, siGunGu, eupMyeonDong);
     }
     public List<Category> findAllCategory(){
-        return categoryRepository.findAll();
+        return categoryRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
     }
 
     public List<Post> findFivePostsByCategory(String categoryTitle){

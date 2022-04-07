@@ -38,6 +38,7 @@ public class UserController {
     private final PostService postService;
     private final BookmarkService bookmarkService;
 
+    /** 회원 관리 가입, 수정, 탈퇴 */
     @GetMapping("/join")
     public String joinForm(Model model) {
         // 모델에 추가하지 않으면 joinForm에서 에러메시지들이 나타남
@@ -71,77 +72,6 @@ public class UserController {
 
         return "redirect:/user/login";
     }
-
-    @GetMapping("/login")
-    public String loginFrom(Model model) {
-        model.addAttribute("user", new User());
-        return "template/user/login";
-    }
-
-    @PostMapping("/login")
-    public String login(@Validated @ModelAttribute("user") UserLoginForm form,
-                        BindingResult bindingResult,
-                        @RequestParam(defaultValue = "/") String redirectURL,
-                        HttpServletRequest request) {
-        if (bindingResult.hasErrors()) {
-            log.info("err= {}", bindingResult);
-            return "template/user/login";
-        }
-
-        User loginUser = userService.confirmUser(form.getEmail(), form.getPass());
-
-        if (loginUser == null) {
-            bindingResult.reject("loginFail", "아이디 또는 비밀번호가 맞지 않습니다.");
-            log.info("err= {}", bindingResult);
-            return "template/user/login";
-        }
-
-        // 로그인 성공 처리 세션처리
-        HttpSession session = request.getSession(true); // true는 기존 세션이 있으면 세션을 반환, 없으면 신규 세션 생성
-        session.setAttribute(Const.LOGIN_SESSION, loginUser);
-        session.setAttribute(Const.SESSION_USER_ID, loginUser.getId());
-
-        return "redirect:" + redirectURL;
-    }
-
-    @GetMapping("/findPassword")
-    public String findPassword() {
-        return "/template/user/find_password";
-    }
-
-    @PostMapping("/findPassword")
-    public void sendEmail(@RequestParam String name, @RequestParam String email) {
-        mailService.sendNewPass(name, email);
-    }
-
-    @ResponseBody
-    @PostMapping("/checkInfo")
-    public FindPasswordForm checkUserByNameAndEmail(@RequestParam String name,
-                                                    @RequestParam String email) {
-        Optional<User> user = userService.findUserByEmailAndName(email, name);
-
-        FindPasswordForm form = new FindPasswordForm();
-        if (!user.isEmpty()) {
-            form = new FindPasswordForm(user.get().getName(),
-                    user.get().getEmail());
-            return form;
-        } else {
-
-            return form;
-        }
-    }
-
-    @PostMapping("/logout")
-    public String logout(HttpServletRequest request) {
-
-        //세션이 있으면 기존 세션 반환, 세션이 없으면 세션 생성하지 X
-        HttpSession session = request.getSession(false);
-
-        if (session != null) session.invalidate();
-
-        return "redirect:/";
-    }
-
     @GetMapping("/info/modify/{userId}")
     public String modifyForm(@PathVariable String userId, Model model,
                              HttpServletRequest request, HttpServletResponse response) {
@@ -162,6 +92,8 @@ public class UserController {
         // 기존 회원정보들을 보이게 수정 시 참고할 수 있도록
         User user = userService.findUserById(Long.parseLong(userId));
         model.addAttribute("user", user);
+
+        model.addAttribute("presentPage", "modify");
 
         return "/template/user/modify";
     }
@@ -247,6 +179,8 @@ public class UserController {
             model.addAttribute("checkSuccess", true);
         }
 
+        model.addAttribute("presentPage", "withdrawal");
+
         return "template/user/withdrawal";
     }
 
@@ -283,7 +217,83 @@ public class UserController {
 
         return "/template/user/notice/withdrawal_success";
     }
+    /** 회원 관리 가입, 수정, 탈퇴 */
 
+
+    /** 로그인, 로그아웃, 비밀번호 찾기 */
+    @GetMapping("/login")
+    public String loginFrom(Model model) {
+        model.addAttribute("user", new User());
+        return "template/user/login";
+    }
+
+    @PostMapping("/login")
+    public String login(@Validated @ModelAttribute("user") UserLoginForm form,
+                        BindingResult bindingResult,
+                        @RequestParam(defaultValue = "/") String redirectURL,
+                        HttpServletRequest request) {
+        if (bindingResult.hasErrors()) {
+            log.info("err= {}", bindingResult);
+            return "template/user/login";
+        }
+
+        User loginUser = userService.confirmUser(form.getEmail(), form.getPass());
+
+        if (loginUser == null) {
+            bindingResult.reject("loginFail", "아이디 또는 비밀번호가 맞지 않습니다.");
+            log.info("err= {}", bindingResult);
+            return "template/user/login";
+        }
+
+        // 로그인 성공 처리 세션처리
+        HttpSession session = request.getSession(true); // true는 기존 세션이 있으면 세션을 반환, 없으면 신규 세션 생성
+        session.setAttribute(Const.LOGIN_SESSION, loginUser);
+        session.setAttribute(Const.SESSION_USER_ID, loginUser.getId());
+
+        return "redirect:" + redirectURL;
+    }
+
+    @GetMapping("/findPassword")
+    public String findPassword() {
+        return "/template/user/find_password";
+    }
+
+    @PostMapping("/findPassword")
+    public String sendEmail(@RequestParam String name, @RequestParam String email) {
+        mailService.sendNewPass(name, email);
+        return "/template/user/login";
+    }
+
+    @ResponseBody
+    @PostMapping("/checkInfo")
+    public FindPasswordForm checkUserByNameAndEmail(@RequestParam String name,
+                                                    @RequestParam String email) {
+        Optional<User> user = userService.findUserByEmailAndName(email, name);
+
+        FindPasswordForm form = new FindPasswordForm();
+        if (!user.isEmpty()) {
+            form = new FindPasswordForm(user.get().getName(),
+                    user.get().getEmail());
+            return form;
+        } else {
+
+            return form;
+        }
+    }
+
+    @PostMapping("/logout")
+    public String logout(HttpServletRequest request) {
+
+        //세션이 있으면 기존 세션 반환, 세션이 없으면 세션 생성하지 X
+        HttpSession session = request.getSession(false);
+
+        if (session != null) session.invalidate();
+
+        return "redirect:/";
+    }
+    /** 로그인, 로그아웃, 비밀번호 찾기 */
+
+    /** 마이페이지 글 목록 */
     @GetMapping("/myPostList/{userId}")
     public String myPostList(@PathVariable String userId, Model model, HttpServletRequest request) {
         List<Post> postList = postService.findPostsByUserId(Long.parseLong(userId));
@@ -294,6 +304,8 @@ public class UserController {
             return "/template/post/error/authority_reject";
         }
 
+        model.addAttribute("presentPage", "myPostList");
+
         return "/template/user/mypost_list";
     }
 
@@ -303,6 +315,9 @@ public class UserController {
         List<Post> postList = postService.findBookmarkPostList(Long.parseLong(userId));
         model.addAttribute("postList", postList);
 
+        model.addAttribute("presentPage", "bookmarkList");
+
         return "/template/user/bookmark_list";
     }
+    /** 마이페이지 글 목록 */
 }
