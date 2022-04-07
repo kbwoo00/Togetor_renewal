@@ -1,5 +1,6 @@
 package com.togetor_renewal.togetor.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -28,6 +29,7 @@ public class User extends BaseTimeEntity{
     private String detailAddress;
     private String extraAddress;
     @OneToMany(mappedBy = "user")
+    @JsonManagedReference
     private List<Post> posts = new ArrayList<>();
     // 댓글 목록 유저가 확인하고 싶으면 필요(양방향)
 //    @OneToMany(mappedBy = "user")

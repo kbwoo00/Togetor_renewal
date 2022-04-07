@@ -17,7 +17,7 @@ public class UserJoinForm {
     @NotBlank
     private String name;
     @NotBlank
-    @Size(min = 5, max = 20, message = "별명은 5 ~ 20자까지 가능합니다.")
+    @Size(min = 3, max = 20, message = "별명은 3 ~ 20자까지 가능합니다.")
     private String nickname;
     @NotBlank
     @Pattern(regexp = "^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$",

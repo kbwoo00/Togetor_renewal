@@ -19,9 +19,13 @@
         postCategories();
 
         $(window).scroll(function () {
-            if ($(window).scrollTop() >= $(document).height() - $(window).height()) {
+            if ($(window).scrollTop() == ($(document).height() - $(window).height())) {
+                console.log('스크롤시');
                 start += pageSize;
                 last += pageSize;
+                console.log('스크롤시');
+                console.log(start);
+                console.log(last);
                 postCategories();
             }
         })
@@ -78,7 +82,7 @@
                             "                        <p class=\"mb-3 text-secondary small\">" + posts[i].siDo + ' ' + posts[i].siGunGu + ' ' + posts[i].eupMyeonDong + "</p>\n" +
                             "                        <strong class=\"mb-4 fs-6 text-black text-truncate col-md-auto content\">" + posts[i].content + "</strong>\n" +
                             "                        <div class=\"row post-info\">\n" +
-                            "                            <small class=\"mb-1 col-md text-black\">" + posts[i].nickname + "</small>\n" +
+                            "                            <small class=\"mb-1 col-md text-black\">" + posts[i].user.nickname + "</small>\n" +
                             "                        </div>\n" +
                             "                        <div class=\"row post-info\">\n" + "" +
                             "                            <div class=\"mb-1 col-md-3 text-muted\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" fill=\"currentColor\" class=\"bi bi-eye\" viewBox=\"0 0 16 16\">\n" +
@@ -94,6 +98,10 @@
                             "                </div>\n" +
                             "            </a>\n");
                     }
+
+                    console.log('반복문 끝');
+                    console.log(start);
+                    console.log(last);
                 }
             }
         });
@@ -106,17 +114,17 @@
         const betweenTime = Math.floor((today.getTime() - timeValue.getTime()) / 1000 / 60);
         if (betweenTime < 1) return '방금전';
         if (betweenTime < 60) {
-            return `${betweenTime}분 전`;
+            return betweenTime + `분 전`;
         }
 
         const betweenTimeHour = Math.floor(betweenTime / 60);
         if (betweenTimeHour < 24) {
-            return `${betweenTimeHour}시간 전`;
+            return betweenTimeHour + `시간 전`;
         }
 
         const betweenTimeDay = Math.floor(betweenTime / 60 / 24);
         if (betweenTimeDay < 365) {
-            return `${betweenTimeDay}일 전`;
+            return betweenTimeDay + `일 전`;
         }
 
         return `${Math.floor(betweenTimeDay / 365)}년 전`;

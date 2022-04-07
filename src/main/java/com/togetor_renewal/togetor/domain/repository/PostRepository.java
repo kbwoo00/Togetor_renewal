@@ -15,7 +15,9 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     Optional<Post> findById(Long postId);
     List<Post> findFirst5ByCategoryTitleOrderByIdDesc(String categoryTitle);
-    List<Post> findPostsByCategoryTitleOrderByIdDesc(String categoryTitle);
+
+    @Query("select p from Post p left join p.user u on p.user.id = u.id where p.categoryTitle= :categoryTitle order by p.id desc")
+    List<Post> findPostsByCategoryTitleOrderByIdDesc(@Param(value = "categoryTitle") String categoryTitle);
     List<Post> findPostsByCategoryTitleAndSiDoOrderByIdDesc(String categoryTitle, String siDo);
     List<Post> findPostsByCategoryTitleAndSiDoAndSiGunGuOrderByIdDesc(String categoryTitle, String siDo, String siGunGu);
     List<Post> findPostsByCategoryTitleAndSiDoAndSiGunGuAndEupMyeonDongOrderByIdDesc(String categoryTitle, String siDo, String siGunGu, String eupMyeonDong);

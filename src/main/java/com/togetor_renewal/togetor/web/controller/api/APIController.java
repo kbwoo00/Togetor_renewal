@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api")
@@ -65,7 +64,7 @@ public class APIController {
             PostCategory postCategory = new PostCategory(
                     post.getId(), post.getTitle(), post.getContent(), post.getRegdate(),
                     post.getCategoryTitle(), post.getSiDo(), post.getSiGunGu(), post.getEupMyeonDong(),
-                    post.getWriter(),
+                    post.getUser().getNickname(),
                     post.getView(),
                     post.getCommentCount()
             );

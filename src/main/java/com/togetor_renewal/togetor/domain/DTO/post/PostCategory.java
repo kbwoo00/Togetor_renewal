@@ -1,5 +1,6 @@
 package com.togetor_renewal.togetor.domain.DTO.post;
 
+import com.togetor_renewal.togetor.domain.entity.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
