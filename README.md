@@ -12,7 +12,7 @@
 
 ## 서비스 소개
 
-## 개발환경
+## 개발 환경
 * IDE : Intelij(인텔리제이)
 * DBMS : MySQL
 * Language : Java(11)
