@@ -1,4 +1,4 @@
-# Togetor-renewal-
+# Togetor-renewal
 기존 동아리 프로젝트 togetor(node.js와 js를 이용)를 리뉴얼(java와 SpringBoot를 이용)한 프로젝트
 
 ## 목차
