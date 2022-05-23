@@ -24,10 +24,8 @@
 2022.3.13 ~ 2022.4.12
 
 ## 설계 
-### ERD 작성
-![togetorERD](https://user-images.githubusercontent.com/59406944/157607478-6cf42ae4-1d0d-458a-a509-9fddc33d4cea.png)
 ### DB 모델링
-![Togetor](https://user-images.githubusercontent.com/59406944/157575841-72d87ada-c2aa-437b-964f-74e6e583d011.png)
+![togetorDB](https://user-images.githubusercontent.com/59406944/169724333-4e343243-137e-4508-8fd5-65879f313fa1.PNG)
 
 ## 프로젝트 화면
 
