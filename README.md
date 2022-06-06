@@ -29,23 +29,26 @@
 ![image](https://user-images.githubusercontent.com/59406944/172181229-cea2ad64-ed6b-41b1-bbdc-f9946bb1539e.png)
 
 ## 프로젝트 화면
-![image](https://user-images.githubusercontent.com/59406944/172187386-882ab063-444d-416c-bb5e-16f361ccd6b2.png)
-![image](https://user-images.githubusercontent.com/59406944/172187537-25eb1c44-4976-4bf8-8847-492c17d9f22c.png)
-![image](https://user-images.githubusercontent.com/59406944/172188189-36a2b7eb-6255-4d20-b168-568661b3aeda.png)
-![image](https://user-images.githubusercontent.com/59406944/172188236-47829e32-6178-4f9d-9b3d-e6caa1ffbe9d.png)
-![image](https://user-images.githubusercontent.com/59406944/172188336-6472a95f-9749-493b-857e-3aa4543764fd.png)
-![image](https://user-images.githubusercontent.com/59406944/172188363-2328e873-4dfe-486e-b3ed-237694763770.png)
-![image](https://user-images.githubusercontent.com/59406944/172189158-198994cc-9a6c-4af5-9e41-8bec6a248cc8.png)
 
-### 경계
+<img src="https://user-images.githubusercontent.com/59406944/172187386-882ab063-444d-416c-bb5e-16f361ccd6b2.png" width="80%" height="60%">
+카테고리 페이지
 
-<img src="https://user-images.githubusercontent.com/59406944/172187386-882ab063-444d-416c-bb5e-16f361ccd6b2.png" width="50%" height="50%">
-<img src="https://user-images.githubusercontent.com/59406944/172187537-25eb1c44-4976-4bf8-8847-492c17d9f22c.png" width="50%" height="50%">
-<img src="https://user-images.githubusercontent.com/59406944/172188189-36a2b7eb-6255-4d20-b168-568661b3aeda.png" width="50%" height="50%">
-<img src="https://user-images.githubusercontent.com/59406944/172188236-47829e32-6178-4f9d-9b3d-e6caa1ffbe9d.png" width="50%" height="50%">
-<img src="https://user-images.githubusercontent.com/59406944/172188336-6472a95f-9749-493b-857e-3aa4543764fd.png" width="50%" height="50%">
-<img src="https://user-images.githubusercontent.com/59406944/172188363-2328e873-4dfe-486e-b3ed-237694763770.png" width="50%" height="50%">
-<img src="https://user-images.githubusercontent.com/59406944/172189158-198994cc-9a6c-4af5-9e41-8bec6a248cc8.png" width="50%" height="50%">
+<img src="https://user-images.githubusercontent.com/59406944/172187537-25eb1c44-4976-4bf8-8847-492c17d9f22c.png" width="80%" height="60%">
+카테고리 페이지(지역 선택시)
+
+<img src="https://user-images.githubusercontent.com/59406944/172188189-36a2b7eb-6255-4d20-b168-568661b3aeda.png" width="80%" height="60%">
+
+
+<img src="https://user-images.githubusercontent.com/59406944/172188236-47829e32-6178-4f9d-9b3d-e6caa1ffbe9d.png" width="80%" height="60%">
+
+
+<img src="https://user-images.githubusercontent.com/59406944/172188336-6472a95f-9749-493b-857e-3aa4543764fd.png" width="80%" height="60%">
+
+
+<img src="https://user-images.githubusercontent.com/59406944/172188363-2328e873-4dfe-486e-b3ed-237694763770.png" width="80%" height="60%">
+
+
+<img src="https://user-images.githubusercontent.com/59406944/172189158-198994cc-9a6c-4af5-9e41-8bec6a248cc8.png" width="80%" height="60%">
 
 
 ## 구현 목록
