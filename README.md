@@ -26,7 +26,7 @@
 
 ## 설계 
 ### DB 모델링
-![togetorDB](https://user-images.githubusercontent.com/59406944/169724333-4e343243-137e-4508-8fd5-65879f313fa1.PNG)
+![image](https://user-images.githubusercontent.com/59406944/172181229-cea2ad64-ed6b-41b1-bbdc-f9946bb1539e.png)
 
 ## 프로젝트 화면
 
